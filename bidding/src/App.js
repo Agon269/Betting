@@ -1,13 +1,13 @@
 import React from "react";
 import Header from "./components/Header";
 import Intro from "./components/Intro";
-import Tabel from "./components/Tabel";
+import MyTable from "./components/Table";
 function App() {
   return (
     <div>
       <Header />
       <Intro />
-      <Tabel />
+      <MyTable />
     </div>
   );
 }
