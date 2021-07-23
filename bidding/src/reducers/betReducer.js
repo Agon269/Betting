@@ -14,7 +14,7 @@ const betReducer = (state = [], action) => {
       sortedBets = mySort(state, action.payload, "descending");
       return [...sortedBets];
     case SEARCH:
-      return search(state, action.payload);
+      return search(action.payload.allBets, action.payload.text);
     default:
       return state;
   }
