@@ -1,16 +1,19 @@
 import React from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-import Collapse from "@material-ui/core/Collapse";
-import IconButton from "@material-ui/core/IconButton";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Typography from "@material-ui/core/Typography";
 
+import {
+  Table,
+  Typography,
+  IconButton,
+  TableBody,
+  TableCell,
+  Button,
+  TableHead,
+  TableRow,
+  Collapse,
+  Box,
+} from "@material-ui/core";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
@@ -18,6 +21,17 @@ const useRowStyles = makeStyles({
   root: {
     "& > *": {
       borderBottom: "unset",
+      btn: {
+        margin: "20px",
+        color: "white",
+      },
+    },
+  },
+  btn: {
+    backgroundColor: "#9400D3",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "#9400D3",
     },
   },
 });
@@ -25,7 +39,9 @@ const useRowStyles = makeStyles({
 const Row = ({ row }) => {
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
+  //   const useStyles = makeStyles((theme) => ({
 
+  // }));
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
@@ -49,6 +65,11 @@ const Row = ({ row }) => {
         <TableCell align="right">{row.expireDate}</TableCell>
         <TableCell align="right">{row.betAmount}</TableCell>
         <TableCell align="right">{row.category}</TableCell>
+        <TableCell align="right">
+          <Button className={classes.btn} variant="contained">
+            Bet
+          </Button>
+        </TableCell>
       </TableRow>
       {/* more details section for the row */}
       <TableRow>
