@@ -61,11 +61,4 @@ export const allBets = [
   },
 ];
 
-export const heads = [
-  "Bet Title",
-  "Creater",
-  "Expire Date",
-  "Bet Amount",
-  "Category",
-  "Action",
-];
+export const heads = ["Creater", "Expire Date", "Bet Amount", "Category"];

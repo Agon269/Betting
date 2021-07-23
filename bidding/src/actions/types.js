@@ -5,3 +5,4 @@ export const EDITBET = "EDITBET";
 export const DELETEBET = "DELETEBET";
 export const ASCSORT = "ASCSORT";
 export const DSCSORT = "DSCSORT";
+export const SEARCH = "SEARCH";
