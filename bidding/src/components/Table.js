@@ -1,15 +1,20 @@
-import React, { useState } from "react";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import React, { useEffect, useState } from "react";
 import { Box, Container, InputBase, TableSortLabel } from "@material-ui/core";
-import Row from "./Row";
-import { allBets, heads } from "../util/bets";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@material-ui/core";
+import Row from "./Row";
+import { heads } from "../util/bets";
+import { getBets, ascSort, dscSort } from "../actions";
+
 const useStyles = makeStyles((theme) => ({
   searchBox: {
     padding: "20px",
@@ -23,29 +28,32 @@ const useStyles = makeStyles((theme) => ({
     color: " #9400D3",
   },
 }));
-const MyTable = () => {
+
+const MyTable = ({ bets, getBets, ascSort, dscSort }) => {
   const classes = useStyles();
-  const [bets, setBets] = useState(allBets);
-  const [order, setOrder] = useState();
-  const [orderBy, setOrderBy] = useState();
+  const [currentSort, setCurrentSort] = useState("");
+  //fetching bets
+  useEffect(() => {
+    getBets();
+  }, [getBets]);
 
   const stableSort = (head) => {
-    const isAsc = order === head && order === "asc";
-    setOrder(isAsc ? "dsc" : "asc");
-    setOrderBy(head);
-
-    function compare(a, b) {
-      if (a.creater < b.creater) {
-        return -1;
-      }
-      if (a.creater > b.creater) {
-        return 1;
-      }
-      return 0;
+    if (head === currentSort) {
+      //descending
+      dscSort(head);
+      setCurrentSort(null);
+    } else {
+      ascSort(head);
+      setCurrentSort(head);
     }
-    let sortedBets = bets.sort(compare);
-    console.log(sortedBets);
   };
+
+  //error
+
+  //waiting for bets to render
+  if (bets.length === 0) return <div>Loading ...</div>;
+
+  //render bets
   return (
     <Container maxWidth="md">
       <TableContainer component={Paper}>
@@ -67,11 +75,7 @@ const MyTable = () => {
                   align={head === "Bet Title" ? "left" : "right"}
                   className={classes.heads}
                 >
-                  <TableSortLabel
-                    activ={orderBy === head}
-                    dirction={orderBy === head ? order : "asc"}
-                    onClick={() => stableSort(head)}
-                  >
+                  <TableSortLabel onClick={() => stableSort(head)}>
                     {head}
                   </TableSortLabel>
                 </TableCell>
@@ -88,4 +92,8 @@ const MyTable = () => {
     </Container>
   );
 };
-export default MyTable;
+
+const mapStateToProps = (state) => {
+  return { bets: state.bets };
+};
+export default connect(mapStateToProps, { getBets, ascSort, dscSort })(MyTable);
