@@ -39,7 +39,7 @@ export const search = (text) => {
   //payload should consist of all data and text field
   return {
     type: SEARCH,
-    payload: text,
+    payload: { text, allBets },
   };
 };
 
