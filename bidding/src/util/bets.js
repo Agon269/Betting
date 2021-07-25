@@ -6,9 +6,9 @@ export const allBets = [
     betAmount: "6000$",
     category: "Politics",
     id: "12312331234d",
-    history: [
-      { date: "2020-01-05", customerId: "11091700", amount: 3 },
-      { date: "2020-01-02", customerId: "Anonymous", amount: 1 },
+    subBets: [
+      { creater: "mang", betAmount: "123$" },
+      { creater: "mang", betAmount: "123$" },
     ],
   },
   {
@@ -18,9 +18,9 @@ export const allBets = [
     betAmount: "4000$",
     category: "Sports",
     id: "12312331234c",
-    history: [
-      { date: "2020-01-05", customerId: "11091700", amount: 3 },
-      { date: "2020-01-02", customerId: "Anonymous", amount: 1 },
+    subBets: [
+      { creater: "mang", betAmount: "123$" },
+      { creater: "mang", betAmount: "123$" },
     ],
   },
   {
@@ -30,9 +30,9 @@ export const allBets = [
     betAmount: "9000$",
     category: "Personal",
     id: "12312331234b",
-    history: [
-      { date: "2020-01-05", customerId: "11091700", amount: 3 },
-      { date: "2020-01-02", customerId: "Anonymous", amount: 1 },
+    subBets: [
+      { creater: "mang", betAmount: "123$" },
+      { creater: "mang", betAmount: "123$" },
     ],
   },
   {
@@ -42,9 +42,9 @@ export const allBets = [
     betAmount: "100$",
     category: "Entertainment",
     id: "12312331234a",
-    history: [
-      { date: "2020-01-05", customerId: "11091700", amount: 3 },
-      { date: "2020-01-02", customerId: "Anonymous", amount: 1 },
+    subBets: [
+      { creater: "mang", betAmount: "123$" },
+      { creater: "mang", betAmount: "123$" },
     ],
   },
   {
@@ -54,9 +54,9 @@ export const allBets = [
     betAmount: "2000$",
     category: "Other",
     id: "12312331234",
-    history: [
-      { date: "2020-01-05", customerId: "11091700", amount: 3 },
-      { date: "2020-01-02", customerId: "Anonymous", amount: 1 },
+    subBets: [
+      { creater: "mang", betAmount: "123$" },
+      { creater: "mang", betAmount: "123$" },
     ],
   },
 ];

@@ -3,8 +3,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
+import AuthModal from "./AuthModal";
 
 //later if we have a logo
 // import IconButton from "@material-ui/core/IconButton";
@@ -38,10 +39,8 @@ export default function Header() {
           <Typography variant="h6" className={classes.title}>
             Betty
           </Typography>
-          <Button className={classes.btn}>Login</Button>
-          <Button className={classes.btn} variant="outlined">
-            Signup
-          </Button>
+          <AuthModal type={"signin"} />
+          <AuthModal type={"signup"} />
         </Toolbar>
       </AppBar>
     </>

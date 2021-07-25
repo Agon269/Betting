@@ -1,4 +1,12 @@
-import { GETBETS, ASCSORT, DSCSORT, SEARCH } from "./types";
+import {
+  GETBETS,
+  ASCSORT,
+  DSCSORT,
+  SEARCH,
+  SIGNIN,
+  SIGNUP,
+  SIGNOUT,
+} from "./types";
 import { allBets } from "../util/bets";
 import { sortProperty } from "../services/sortype";
 export const getBets = () => {
@@ -32,5 +40,28 @@ export const search = (text) => {
   return {
     type: SEARCH,
     payload: { text, allBets },
+  };
+};
+
+//=====================USER ACTIONS ====================
+export const signIn = (formVals) => {
+  let user = { userName: "Abel", Id: "123123", bets: [1, 2, 4], wallet: 20 };
+  //make api call to get user
+  return {
+    type: SIGNIN,
+    payload: user,
+  };
+};
+export const signUp = (formVals) => {
+  let user = { userName: "Abel", Id: "123123", bets: [1, 2, 4], wallet: 20 };
+  //make api call to get user
+  return {
+    type: SIGNUP,
+    payload: user,
+  };
+};
+export const signOut = () => {
+  return {
+    type: SIGNOUT,
   };
 };

@@ -39,9 +39,7 @@ const useRowStyles = makeStyles({
 const Row = ({ row }) => {
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
-  //   const useStyles = makeStyles((theme) => ({
 
-  // }));
   return (
     <React.Fragment>
       <TableRow className={classes.root}>
@@ -82,22 +80,18 @@ const Row = ({ row }) => {
               <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="right">Total price ($)</TableCell>
+                    <TableCell>Creater</TableCell>
+                    <TableCell>Bet Amount</TableCell>
+                    <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">
-                        {Math.round(historyRow.amount * row.price * 100) / 100}
+                  {row.subBets.map((subBet) => (
+                    <TableRow key={subBet.creater}>
+                      <TableCell>{subBet.creater}</TableCell>
+                      <TableCell>{subBet.betAmount}</TableCell>
+                      <TableCell>
+                        <Button className={classes.btn}>Bet</Button>
                       </TableCell>
                     </TableRow>
                   ))}
