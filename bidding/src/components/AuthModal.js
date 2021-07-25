@@ -17,16 +17,19 @@ const useStyles = makeStyles((theme) => ({
     color: "#9400D3",
     borderColor: "#9400D3",
   },
-  popBtn: { color: "white", backgroundColor: "transparent", marginLeft: "5px" },
+  popBtn: {
+    color: "white",
+    backgroundColor: "transparent",
+    marginLeft: "5px",
+  },
   dialog: {
-    "&>div": {
-      "&>div": {
-        border: "2px solid #9400D3",
-        padding: "20px 110px",
-        alignItems: "center",
-        borderRadius: "10px",
-      },
-    },
+    border: "2px solid #9400D3",
+    maxWidth: "920px",
+    padding: "20px 50px",
+    alignItems: "center",
+    borderRadius: "10px",
+    position: "absolute",
+    top: theme.spacing(5),
   },
 }));
 
@@ -52,8 +55,8 @@ const AuthModal = ({ type }) => {
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
-        className={classes.dialog}
         maxWidth="lg"
+        classes={{ paper: classes.dialog }}
       >
         <DialogTitle id="form-dialog-title" className={classes.formHead}>
           <Typography variant="h4">
