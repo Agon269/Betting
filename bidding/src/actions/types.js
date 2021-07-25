@@ -6,3 +6,9 @@ export const DELETEBET = "DELETEBET";
 export const ASCSORT = "ASCSORT";
 export const DSCSORT = "DSCSORT";
 export const SEARCH = "SEARCH";
+
+//============================ User types ==================
+export const SIGNIN = "SIGNIN";
+export const SIGNUP = "SIGNUP";
+export const SIGNOUT = "SIGNOUT";
+export const GETUSER = "GETUSER";
