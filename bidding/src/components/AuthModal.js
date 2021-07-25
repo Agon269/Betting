@@ -46,6 +46,9 @@ const AuthModal = ({ type }) => {
     setOpen(false);
   };
 
+  const onSubmit = (formValues) => {
+    console.log(formValues);
+  };
   return (
     <div>
       <Button className={classes.popBtn} onClick={handleClickOpen}>
@@ -65,10 +68,12 @@ const AuthModal = ({ type }) => {
           </Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText></DialogContentText>
-          <AuthForm />
+          <DialogContentText>
+            Welcome to Betty Join us in our journey to make the best betting app
+          </DialogContentText>
+          <AuthForm onSubmit={onSubmit} />
         </DialogContent>
-        <DialogActions className={classes.actions}>
+        {/* <DialogActions className={classes.actions}>
           <Button
             onClick={handleClose}
             className={classes.confirmBtn}
@@ -79,7 +84,7 @@ const AuthModal = ({ type }) => {
           <Button onClick={handleClose} variant="contained">
             Cancel
           </Button>
-        </DialogActions>
+        </DialogActions> */}
       </Dialog>
     </div>
   );
