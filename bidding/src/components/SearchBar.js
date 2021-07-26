@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Box, Button, InputBase } from "@material-ui/core";
+import React from "react";
+import { Box, InputBase } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const SearchBar = ({ search, userSearched }) => {
   const classes = useStyles();
-  const [searchText, setSearchText] = useState("");
+  // const [searchText, setSearchText] = useState("");
   const searchHandler = (text) => {
     userSearched();
     search(text);
@@ -34,11 +34,8 @@ const SearchBar = ({ search, userSearched }) => {
         placeholder="Search by Id"
         variant="outline"
         className={classes.text}
-        onChange={(e) => setSearchText(e.target.value)}
+        onChange={(e) => searchHandler(e.target.value)}
       />
-      <Button className={classes.btn} onClick={() => searchHandler(searchText)}>
-        Search
-      </Button>
     </Box>
   );
 };
