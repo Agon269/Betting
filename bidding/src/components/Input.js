@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     marginTop: theme.spacing(1),
     width: "100%",
-    marginBottom: "20px",
+    marginBottom: "10px",
   },
   error: {
     border: "1px solid red ",

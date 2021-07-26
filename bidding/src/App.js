@@ -1,15 +1,23 @@
 import React from "react";
+import Auth from "./Auth";
 import BetDetails from "./components/BetDetails";
 import Header from "./components/Header";
 import Intro from "./components/Intro";
 import MyTable from "./components/Table";
+import User from "./pages/User";
+import BetPage from "./pages/BetPage";
 function App() {
   return (
     <div>
       <Header />
-      <Intro />
+
+      {/* <User /> */}
+      {/* <Intro />
       <BetDetails />
-      <MyTable />
+      <MyTable /> */}
+      <BetPage />
+
+      <Auth />
     </div>
   );
 }

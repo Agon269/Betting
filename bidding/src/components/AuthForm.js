@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
   },
   confirmBtn: {
     color: "white",
+    marginTop: "10px",
     backgroundColor: "#9400D3",
     "&:hover": {
       backgroundColor: "#9400D3",
@@ -22,13 +23,8 @@ const useStyles = makeStyles((theme) => ({
 const AuthForm = (props) => {
   const classes = useStyles();
 
-  const sub = (formValues) => {
-    console.log("er");
-    console.log(formValues);
-  };
-
   return (
-    <form autoComplete="off" onSubmit={props.handleSubmit(sub)}>
+    <form autoComplete="off" onSubmit={props.handleSubmit(props.onSubmit)}>
       <Box display="flex" className={classes.formGroup}>
         <Box>
           <Field

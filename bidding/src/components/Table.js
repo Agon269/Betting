@@ -125,7 +125,8 @@ const MyTable = ({ bets, getBets, ascSort, dscSort, search }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { bets: state.bets };
+  let bets = Object.values(state.bets);
+  return { bets };
 };
 export default connect(mapStateToProps, { getBets, ascSort, dscSort, search })(
   MyTable

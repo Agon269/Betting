@@ -5,6 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AuthModal from "./AuthModal";
+import { connect } from "react-redux";
 
 //later if we have a logo
 // import IconButton from "@material-ui/core/IconButton";
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header() {
+const Header = ({ user }) => {
   const classes = useStyles();
   return (
     <>
@@ -38,10 +39,21 @@ export default function Header() {
           <Typography variant="h6" className={classes.title}>
             Betty
           </Typography>
-          <AuthModal type={"signin"} />
-          <AuthModal type={"signup"} />
+          {user.isSignedIn === true ? (
+            ""
+          ) : (
+            <>
+              <AuthModal type={"signin"} />
+              <AuthModal type={"signup"} />
+            </>
+          )}
         </Toolbar>
       </AppBar>
     </>
   );
-}
+};
+
+const mapStateToProps = (state) => {
+  return { user: state.user };
+};
+export default connect(mapStateToProps)(Header);

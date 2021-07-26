@@ -1,4 +1,5 @@
 export function mySort(bets, sortBy, type) {
+  bets = Object.values(bets);
   let sortedBets = bets.sort(dynamicSort(sortBy));
 
   if (type === undefined) return sortedBets;

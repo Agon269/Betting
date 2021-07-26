@@ -8,6 +8,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import AuthForm from "./AuthForm";
+import { connect } from "react-redux";
+import { signIn, signUp } from "../actions/index";
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(0),
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AuthModal = ({ type }) => {
+const AuthModal = ({ type, signUp, signIn }) => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -47,7 +49,8 @@ const AuthModal = ({ type }) => {
   };
 
   const onSubmit = (formValues) => {
-    console.log(formValues);
+    if (type === "signin") signIn(formValues);
+    else signUp(formValues);
   };
   return (
     <div>
@@ -89,4 +92,4 @@ const AuthModal = ({ type }) => {
     </div>
   );
 };
-export default AuthModal;
+export default connect(null, { signIn, signUp })(AuthModal);
