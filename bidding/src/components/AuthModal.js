@@ -8,6 +8,8 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import AuthForm from "./AuthForm";
+import { connect } from "react-redux";
+import { signIn, signUp } from "../actions/index";
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(0),
@@ -17,20 +19,23 @@ const useStyles = makeStyles((theme) => ({
     color: "#9400D3",
     borderColor: "#9400D3",
   },
-  popBtn: { color: "white", backgroundColor: "transparent", marginLeft: "5px" },
+  popBtn: {
+    color: "white",
+    backgroundColor: "transparent",
+    marginLeft: "5px",
+  },
   dialog: {
-    "&>div": {
-      "&>div": {
-        border: "2px solid #9400D3",
-        padding: "20px 110px",
-        alignItems: "center",
-        borderRadius: "10px",
-      },
-    },
+    border: "2px solid #9400D3",
+    maxWidth: "920px",
+    padding: "20px 50px",
+    alignItems: "center",
+    borderRadius: "10px",
+    position: "absolute",
+    top: theme.spacing(5),
   },
 }));
 
-const AuthModal = ({ type }) => {
+const AuthModal = ({ type, signUp, signIn }) => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -43,6 +48,10 @@ const AuthModal = ({ type }) => {
     setOpen(false);
   };
 
+  const onSubmit = (formValues) => {
+    if (type === "signin") signIn(formValues);
+    else signUp(formValues);
+  };
   return (
     <div>
       <Button className={classes.popBtn} onClick={handleClickOpen}>
@@ -52,8 +61,8 @@ const AuthModal = ({ type }) => {
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
-        className={classes.dialog}
         maxWidth="lg"
+        classes={{ paper: classes.dialog }}
       >
         <DialogTitle id="form-dialog-title" className={classes.formHead}>
           <Typography variant="h4">
@@ -62,10 +71,12 @@ const AuthModal = ({ type }) => {
           </Typography>
         </DialogTitle>
         <DialogContent>
-          <DialogContentText></DialogContentText>
-          <AuthForm />
+          <DialogContentText>
+            Welcome to Betty Join us in our journey to make the best betting app
+          </DialogContentText>
+          <AuthForm onSubmit={onSubmit} />
         </DialogContent>
-        <DialogActions className={classes.actions}>
+        {/* <DialogActions className={classes.actions}>
           <Button
             onClick={handleClose}
             className={classes.confirmBtn}
@@ -76,9 +87,9 @@ const AuthModal = ({ type }) => {
           <Button onClick={handleClose} variant="contained">
             Cancel
           </Button>
-        </DialogActions>
+        </DialogActions> */}
       </Dialog>
     </div>
   );
 };
-export default AuthModal;
+export default connect(null, { signIn, signUp })(AuthModal);

@@ -35,10 +35,6 @@ const MyTable = ({ bets, getBets, ascSort, dscSort, search }) => {
   const classes = useStyles();
   const [currentSort, setCurrentSort] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
-  //fetching bets
-  useEffect(() => {
-    getBets();
-  }, [getBets]);
 
   const stableSort = (head) => {
     if (bets.length === 0) {
@@ -124,9 +120,4 @@ const MyTable = ({ bets, getBets, ascSort, dscSort, search }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return { bets: state.bets };
-};
-export default connect(mapStateToProps, { getBets, ascSort, dscSort, search })(
-  MyTable
-);
+export default connect(null, { getBets, ascSort, dscSort, search })(MyTable);

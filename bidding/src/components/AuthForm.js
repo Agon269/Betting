@@ -1,42 +1,77 @@
 import React from "react";
-import { Field, Form, Formik } from "formik";
-import { Box, InputBase, TextField } from "@material-ui/core";
+import { Box, Button, InputBase, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import asyncvalidate from "./asyncvalidate";
+import { Field, reduxForm } from "redux-form";
+import Input from "./Input";
 const useStyles = makeStyles((theme) => ({
   formGroup: {
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
   },
-  text: {
-    border: "1px solid #9400D3 ",
-    height: "6vh",
-
-    padding: theme.spacing(2),
-    marginBottom: "20px",
+  confirmBtn: {
+    color: "white",
+    marginTop: "10px",
+    backgroundColor: "#9400D3",
+    "&:hover": {
+      backgroundColor: "#9400D3",
+    },
   },
 }));
-const AuthForm = () => {
+
+const AuthForm = (props) => {
   const classes = useStyles();
 
   return (
-    <Box display="flex" className={classes.formGroup}>
-      <Box>
-        <InputBase
-          placeholder="User name"
-          variant="outline"
-          className={classes.text}
-        />
+    <form autoComplete="off" onSubmit={props.handleSubmit(props.onSubmit)}>
+      <Box display="flex" className={classes.formGroup}>
+        <Box>
+          <Field
+            name="userName"
+            type="text"
+            component={Input}
+            label="User Name"
+          />
+        </Box>
+        <Box>
+          <Field
+            name="password"
+            component={Input}
+            label="Password"
+            type="password"
+          />
+        </Box>
+        <Button
+          variant="contained"
+          className={classes.confirmBtn}
+          type="submit"
+        >
+          Submit
+        </Button>
       </Box>
-      <Box>
-        <InputBase
-          placeholder="Password"
-          type="password"
-          variant="outline"
-          className={classes.text}
-        />
-      </Box>
-    </Box>
+    </form>
   );
 };
-export default AuthForm;
+
+const validate = (formValues) => {
+  const errors = {};
+
+  if (!formValues.userName) {
+    errors.userName = "You must enter a user name";
+  }
+  if (!formValues.password) {
+    errors.password = "You must enter password";
+  }
+  if (formValues.password && formValues.password.length < 6) {
+    errors.password = "Password needs to be at least 6 characters";
+  }
+
+  return errors;
+};
+
+export default reduxForm({
+  form: "AuthForm",
+  validate,
+  asyncvalidate,
+})(AuthForm);
