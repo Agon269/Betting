@@ -5,6 +5,9 @@ import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import CheckIcon from "@material-ui/icons/Check";
 import CloseIcon from "@material-ui/icons/Close";
 import CallMadeIcon from "@material-ui/icons/CallMade";
+import PeopleOutlineIcon from "@material-ui/icons/PeopleOutline";
+import EventBusySharpIcon from "@material-ui/icons/EventBusySharp";
+
 const MyCard = ({ head, number, type }) => {
   const useStyles = makeStyles((theme) => ({
     myCard: {
@@ -33,14 +36,18 @@ const MyCard = ({ head, number, type }) => {
     if (type === "won") return <CheckIcon className={classes.statIcon} />;
     if (type === "lost") return <CloseIcon className={classes.statIcon} />;
     if (type === "bet") return <CallMadeIcon className={classes.statIcon} />;
+    if (type === "date")
+      return <EventBusySharpIcon className={classes.statIcon} />;
+    if (type === "people")
+      return <PeopleOutlineIcon className={classes.statIcon} />;
   };
   return (
     <Card className={classes.myCard} elevation={3}>
       <CardContent>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h5" gutterBottom>
           {head}
         </Typography>
-        <Typography className={classes.stat} variant="h4" component="p">
+        <Typography className={classes.stat} variant="h5" component="p">
           {number}
           {type === "money" ? "$" : ""}
         </Typography>

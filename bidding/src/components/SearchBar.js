@@ -26,6 +26,7 @@ const SearchBar = ({ search, userSearched }) => {
   const searchHandler = (text) => {
     userSearched();
     search(text);
+    setSearchText("");
   };
   return (
     <Box className={classes.searchBox}>
