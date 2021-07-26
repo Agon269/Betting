@@ -8,12 +8,12 @@ function App() {
   return (
     <div>
       <Header />
-      {/* <Home /> */}
-      <User />
-      {/* 
-      <BetPage /> */}
+      <Home />
+      {/* <User /> */}
 
-      {/* <Auth /> */}
+      {/* <BetPage /> */}
+      {/* 
+      <Auth /> */}
     </div>
   );
 }
