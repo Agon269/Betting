@@ -62,7 +62,7 @@ const register = async (req, res, next) => {
     
     // check if user with same username exists or no
 
-    const { name, username, password } = req.body;
+    const {  username, password } = req.body;
 
     let existingUser = await User.findOne({ username });
     if (existingUser) {
@@ -77,7 +77,6 @@ const register = async (req, res, next) => {
     // Add avatar with media manager here if needed
 
     const newUser = new User({
-      name,
       username,
       password: hashedPass,
       wallet: 5000,
