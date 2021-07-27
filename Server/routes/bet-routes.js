@@ -4,10 +4,19 @@ const {check} = require("express-validator")
 const betController = require("../controllers/bet-controller")
 const MYCONSTANTS = require("../constants")
 
-const route = Router()
+const router = Router()
 
 
-route.post(
+// Route to get all bets
+
+router.get("/", betController.allBets)
+
+// Route to get a bet
+router.get("/:id", betController.aBet)
+
+
+// Route to create a new room with bet
+router.post(
   "/createbet",
   authenCheck,
   [
@@ -21,9 +30,12 @@ route.post(
   betController.createBet
 );
 
-route.post("/matchbet/:betID", authenCheck, betController.matchBet)
 
-route.post(
+// Route to match a bet
+router.post("/matchbet/:betID", authenCheck, betController.matchBet)
+
+// Route to create a sub-bet in a room
+router.post(
   "/createSubBet/:roomID",
   authenCheck,
   [
@@ -33,12 +45,17 @@ route.post(
   betController.createSubBet
 );
 
-route.put("/:id", authenCheck, [
+
+// Route to edit a bet in a room
+router.put("/:id", authenCheck, [
   check("amount").isFloat({ min: MYCONSTANTS.MIN_BID_AMOUNT, max: MYCONSTANTS.MAX_BID_AMOUNT }),
   check("side").isBoolean(),
 ], betController.editBet)
 
-route.delete("/:id", authenCheck, betController.deleteBet)
+
+// Route to delete a bet
+
+router.delete("/:id", authenCheck, betController.deleteBet)
 
 
-module.exports = route
+module.exports = router

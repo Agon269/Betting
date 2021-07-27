@@ -7,7 +7,45 @@ const User = require("../models/user")
 const Bet = require("../models/bet")
 const Room = require("../models/room");
 const validateBetForEditAndDelete = require("../utilities/validation-functions");
-const { use } = require("../routes/bet-routes");
+
+// Function for getting all bets
+
+const allBets = async(req,res,next)=>{
+
+try {
+
+  const bets = await Bet.find({}).populate("room").populate("opposingBet")
+  res.send({ bets: bets})
+
+
+} catch (error) {
+  const err = new HttpError("Getting bets failed due to internal server issue, please try again later.", 500);
+  return next(err);
+}
+
+}
+
+
+// Function for getting a bet
+
+const aBet = async (req, res, next) => {
+
+  try {
+    const bet = await Bet.findById(req.params.id).populate("room").populate("opposingBet")
+    if(!bet){
+      return next(new HttpError("The bet with the id doesn't exist.", 422))
+    }
+    res.send({ bet: bet })
+  } catch (error) {
+    const err = new HttpError("Getting a bet failed due to internal server issue, please try again later.", 500);
+    return next(err);
+  }
+
+}
+
+
+
+
 
 // Function for creating a bet
 const createBet = async (req,res,next)=>{
@@ -126,6 +164,9 @@ const matchBet = async (req,res,next)=>{
     }
     // Get Bet room and check if room is still open for bets
     const room = matchedBet.room
+    if(!room){
+      return next(new HttpError("The room in which the bet is to be matched doesn't exist.", 422))
+    }
     if (!(room.endTime.valueOf() > new Date().valueOf()) || room.winner != undefined) {
       return next(new HttpError("The time has ended for betting in this room.", 422));
     }
@@ -183,7 +224,7 @@ const matchBet = async (req,res,next)=>{
   
 }
 
-
+// Function for creating a sub bet
 const createSubBet = async (req,res,next)=>{
   try {
     // Input validation
@@ -206,6 +247,9 @@ const createSubBet = async (req,res,next)=>{
 
     // Get Room
     const room = await Room.findById(req.params.roomID);
+    if(!room){
+      return next(new HttpError("The room to create bet in doesn't exist.", 422))
+    }
 
     if (!(room.endTime.valueOf() > new Date().valueOf()) || room.winner != undefined) {
       return next(
@@ -256,6 +300,7 @@ const createSubBet = async (req,res,next)=>{
 }
 
 
+// Function for editing a bet
 const editBet = async (req,res,next)=>{
 
   try {
@@ -314,6 +359,9 @@ const editBet = async (req,res,next)=>{
 
 }
 
+
+
+// Function for deliting a bet
 const deleteBet = async (req, res, next) => {
     try {
       // Validate user, room and bet
@@ -367,6 +415,8 @@ const deleteBet = async (req, res, next) => {
 
 
 
+exports.allBets = allBets
+exports.aBet = aBet
 exports.createBet = createBet
 exports.matchBet = matchBet;
 exports.createSubBet = createSubBet;

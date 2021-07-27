@@ -7,6 +7,7 @@ require("dotenv").config()
 // Routes
 const userRoutes = require("./routes/user-routes")
 const betRoutes = require("./routes/bet-routes")
+const roomRoutes = require("./routes/room-routes")
 // Models
 const HttpError = require("./models/http-error")
 
@@ -21,8 +22,9 @@ app.use(express.json())
 
 
 // Add the routes
-app.use("/api/user",userRoutes);
-app.use("/api/bet", betRoutes);
+app.use("/api/users",userRoutes);
+app.use("/api/bets", betRoutes);
+app.use("/api/rooms", roomRoutes);
 
 
 // Error for non-existing route
