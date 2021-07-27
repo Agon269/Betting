@@ -53,9 +53,20 @@ const AuthModal = ({ type, signUp, signIn }) => {
   };
   return (
     <div>
-      <Button className={classes.popBtn} onClick={handleClickOpen}>
-        {type === "signin" ? "Sign In" : "Sign up"}
-      </Button>
+      {type === "signin" ? (
+        <Button className={classes.popBtn} onClick={handleClickOpen}>
+          Sign in
+        </Button>
+      ) : (
+        <Button
+          variant={"outlined"}
+          className={classes.popBtn}
+          onClick={handleClickOpen}
+        >
+          Sign up
+        </Button>
+      )}
+
       <Dialog
         open={open}
         onClose={handleClose}
@@ -65,7 +76,6 @@ const AuthModal = ({ type, signUp, signIn }) => {
       >
         <DialogTitle id="form-dialog-title" className={classes.formHead}>
           <Typography variant="h4">
-            {" "}
             {type === "signin" ? "Sign In" : "Sign up"}
           </Typography>
         </DialogTitle>
@@ -75,18 +85,6 @@ const AuthModal = ({ type, signUp, signIn }) => {
           </DialogContentText>
           <AuthForm onSubmit={onSubmit} />
         </DialogContent>
-        {/* <DialogActions className={classes.actions}>
-          <Button
-            onClick={handleClose}
-            className={classes.confirmBtn}
-            variant="outlined"
-          >
-            {type === "signin" ? "Sign In" : "Sign up"}
-          </Button>
-          <Button onClick={handleClose} variant="contained">
-            Cancel
-          </Button>
-        </DialogActions> */}
       </Dialog>
     </div>
   );

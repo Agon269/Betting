@@ -5,13 +5,16 @@ import { createStore, applyMiddleware, compose } from "redux";
 import reduxThunk from "redux-thunk";
 import App from "./App";
 import reducers from "./reducers";
-import authHeaqder from "./services/auth-header";
+import { getUser } from "./actions/auth-actions";
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   reducers,
   composeEnhancers(applyMiddleware(reduxThunk))
 );
-authHeaqder(localStorage.jwtToken);
+
+if (localStorage.jwtToken) {
+  store.dispatch(getUser(localStorage.jwtToken));
+}
 render(
   <Provider store={store}>
     <App />

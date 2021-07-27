@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import asyncvalidate from "./asyncvalidate";
 import { Field, reduxForm } from "redux-form";
 import Input from "./Input";
 const useStyles = makeStyles((theme) => ({
@@ -63,8 +62,8 @@ const validate = (formValues) => {
   if (!formValues.password) {
     errors.password = "You must enter password";
   }
-  if (formValues.password && formValues.password.length < 6) {
-    errors.password = "Password needs to be at least 6 characters";
+  if (formValues.password && formValues.password.length < 8) {
+    errors.password = "Password needs to be at least 8 characters";
   }
 
   return errors;
@@ -73,5 +72,4 @@ const validate = (formValues) => {
 export default reduxForm({
   form: "AuthForm",
   validate,
-  asyncvalidate,
 })(AuthForm);

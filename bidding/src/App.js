@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import Auth from "./Auth";
+import React from "react";
 import Header from "./components/Header";
 import User from "./pages/User";
 import BetPage from "./pages/BetPage";
 import Home from "./pages/Home";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
       <Header />
       <Switch>
         <Route path="/" exact component={Home} />
-        <Route path="/user" component={User} />
+        <ProtectedRoute exact path="/user" component={User} />
         <Route path="/bet" component={BetPage} />
       </Switch>
     </Router>

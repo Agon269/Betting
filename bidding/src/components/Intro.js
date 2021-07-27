@@ -51,7 +51,7 @@ export default function Intro() {
   return (
     <Container maxWidth="lg" className={classes.introdiv}>
       <Grid container spacing={2}>
-        <Grid item sm={6} xs={12}>
+        <Grid item sm={6} md={6} xs={12}>
           <Typography variant="h1">Bet with your friends</Typography>
           <Typography variant="h6" gutterBottom>
             body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -63,7 +63,7 @@ export default function Intro() {
             Bet Now
           </Button>
         </Grid>
-        <Grid item xs={0} sm={6} md={0}>
+        <Grid item sm={6} xs={false}>
           <CardMedia
             className={classes.media}
             image="https://res.cloudinary.com/dvfihlcxd/image/upload/v1626705273/bet/7511_nkkpuz.svg"

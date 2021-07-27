@@ -14,7 +14,7 @@ function BetPage({ bet, getBet }) {
   useEffect(() => {
     getBet();
   }, [getBet]);
-
+  console.log(bet);
   const useStyles = makeStyles((theme) => ({
     cont: {
       marginTop: "30px",

@@ -30,11 +30,12 @@ const User = ({ getUserBets, bets, user }) => {
   useEffect(() => {
     // getUserBets(user);
   });
+
   return (
     <>
       <Container component={Paper} className={classes.cont}>
         <Typography className={classes.userHeader} variant="h4">
-          Hi Gupta
+          {user.username}
         </Typography>
         <Box
           display="flex"
@@ -60,6 +61,7 @@ const User = ({ getUserBets, bets, user }) => {
 
 const mapStateToProps = (state) => {
   let bets = Object.values(state.bets);
-  return { bets, user: state.user };
+  let { currentUser } = state.user;
+  return { bets, user: { ...currentUser } };
 };
 export default connect(mapStateToProps, { getUserBets })(User);
