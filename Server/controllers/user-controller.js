@@ -105,24 +105,16 @@ const register = async (req, res, next) => {
 };
 
 
-// These are being used for auth testing, please remove later
+const getUser = async (req,res,next)=>{
 
-const secure = (req, res, next) => {
+  res.status(200).json({user:req.userData})
+  
+}
 
-  console.log("Secure route");
-  res.send({route:"Secure",data:req.userData});
 
-};
 
-const notSecure = (req, res, next) => {
-
-  console.log("Not secure route");
-  res.send({ route: "Not secure", data: req.userData });
-
-};
 
 
 exports.login = login;
 exports.register = register;
-exports.notSecure = notSecure;
-exports.secure = secure;
+exports.getUser = getUser;

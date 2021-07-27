@@ -20,8 +20,8 @@ router.post("/login", [check("username").not().isEmpty(), check("password").not(
 
 
 // Test route, remove after auth test
-router.get("/", userController.notSecure);
-router.get("/securetest",authenCheck, userController.secure);
+router.get("/", authenCheck, userController.getUser);
+
 
 
 module.exports = router
