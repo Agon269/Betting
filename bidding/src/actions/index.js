@@ -3,17 +3,17 @@ import {
   ASCSORT,
   DSCSORT,
   SEARCH,
-  SIGNIN,
-  SIGNUP,
-  SIGNOUT,
-  GETUSER,
   GETUSERBETS,
   GETBET,
 } from "./types";
 import { allBets } from "../util/bets";
 import { sortProperty } from "../services/sortype";
-export const getBets = () => {
+import betty from "../api/betty";
+import authHeaqder from "../services/auth-header";
+
+export const getBets = () => async (dispatch) => {
   //fetch all
+
   return {
     type: GETBETS,
     payload: allBets,
@@ -46,41 +46,6 @@ export const search = (text) => {
   };
 };
 
-//=====================AUTH ACTIONS ====================
-export const signIn = (formVals) => {
-  console.log(formVals);
-  console.log("here in signin");
-  let user = { userName: "Abel", Id: "123123", bets: [1, 2, 4], wallet: 20 };
-  //make api call to get user
-  return {
-    type: SIGNIN,
-    payload: user,
-  };
-};
-export const signUp = (formVals) => {
-  console.log(formVals);
-  console.log("here in signup");
-  let user = { userName: "Abel", Id: "123123", bets: [1, 2, 4], wallet: 20 };
-  //make api call to get user
-  return {
-    type: SIGNUP,
-    payload: user,
-  };
-};
-
-export const getUser = (token) => {
-  let user = { userName: "Abel", Id: "123123", bets: [1, 2, 4], wallet: 20 };
-  //make api call
-  return {
-    type: GETUSER,
-    payload: user,
-  };
-};
-export const signOut = () => {
-  return {
-    type: SIGNOUT,
-  };
-};
 //================================== USER ACTIONS ===========================
 export const getUserBets = (token) => {
   //make api call

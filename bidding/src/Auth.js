@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import Cookies from "universal-cookie";
-import { getUser } from "./actions";
+import { getUser } from "./actions/auth-actions";
 
 const Auth = ({ getUser, user }) => {
   const cookies = new Cookies();
