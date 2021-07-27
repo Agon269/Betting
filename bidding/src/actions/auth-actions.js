@@ -3,10 +3,9 @@ import betty from "../api/betty";
 import authHeaqder from "../services/auth-header";
 
 export const signIn = (formVals) => async (dispatch) => {
-  let data = { name: "gupta", username: "gupta11", password: "gupta1199" };
   let res;
   try {
-    res = await betty.post(`/user/login/`, { ...data });
+    res = await betty.post(`/user/login/`, { ...formVals });
     const token = res.data.token;
     localStorage.setItem("jwtToken", token);
     authHeaqder(token);
@@ -18,11 +17,9 @@ export const signIn = (formVals) => async (dispatch) => {
   }
 };
 export const signUp = (formVals) => async (dispatch) => {
-  let data = { name: "gupta", username: "gupta11", password: "gupta1199" };
-
   let res;
   try {
-    res = await betty.post(`/user/register/`, { ...data });
+    res = await betty.post(`/user/register/`, { ...formVals });
     const token = res.data.token;
     localStorage.setItem("jwtToken", token);
     authHeaqder(token);
