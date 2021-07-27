@@ -33,14 +33,13 @@ app.use((req, res, next) => {
 
 
 
-
 // Middlware for error handling
 app.use((err,req,res,next)=>{
     if(res.headerSent){
         return next(err)
     }
     res.status(err.code || 500)
-    res.json(err.message || "Oops, an unknown error occured.")
+    res.json({message:err.message || "Oops, an unknown error occured."})
 })
 
 
