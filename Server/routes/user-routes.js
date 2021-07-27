@@ -11,7 +11,7 @@ const router = Router()
 
 router.post(
   "/register",
-  [check("username").not().isEmpty(), check("name").not().isEmpty(), check("password").isLength({ min: 8, max: 16 })],
+  [check("username").not().isEmpty(),  check("password").isLength({ min: 8, max: 16 })],
   userController.register
 );
 

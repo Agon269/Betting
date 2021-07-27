@@ -39,8 +39,7 @@ const login = async(req,res,next)=>{
     res.status(201).json({ user: existingUser.toJSON(), token });
 
   } catch (error) {
-    console.log(error);
-    const err = new HttpError("Logging in failed, please try again later.", 500);
+    const err = new HttpError("Logging in failed due to internal server issue, please try again later.", 500);
     return next(err);
   }
 
@@ -77,7 +76,6 @@ const register = async (req, res, next) => {
     // Add avatar with media manager here if needed
 
     const newUser = new User({
-      name,
       username,
       password: hashedPass,
       wallet: 5000,
@@ -95,8 +93,7 @@ const register = async (req, res, next) => {
 
 
   } catch (error) {
-    console.log(error);
-    const err = new HttpError("Registering failed, please try again later.", 500);
+    const err = new HttpError("Registering failed due to internal server issue, please try again later.", 500);
     return next(err);
   }
     
