@@ -5,7 +5,47 @@ const getUUID = require("../utilities/uuid-generator");
 const HttpError = require("../models/http-error")
 const User = require("../models/user")
 const Bet = require("../models/bet")
-const Room = require("../models/room")
+const Room = require("../models/room");
+const validateBetForEditAndDelete = require("../utilities/validation-functions");
+
+// Function for getting all bets
+
+const allBets = async(req,res,next)=>{
+
+try {
+
+  const bets = await Bet.find({}).populate("room").populate("opposingBet")
+  res.send({ bets: bets})
+
+
+} catch (error) {
+  const err = new HttpError("Getting bets failed due to internal server issue, please try again later.", 500);
+  return next(err);
+}
+
+}
+
+
+// Function for getting a bet
+
+const aBet = async (req, res, next) => {
+
+  try {
+    const bet = await Bet.findById(req.params.id).populate("room").populate("opposingBet")
+    if(!bet){
+      return next(new HttpError("The bet with the id doesn't exist.", 422))
+    }
+    res.send({ bet: bet })
+  } catch (error) {
+    const err = new HttpError("Getting a bet failed due to internal server issue, please try again later.", 500);
+    return next(err);
+  }
+
+}
+
+
+
+
 
 // Function for creating a bet
 const createBet = async (req,res,next)=>{
@@ -81,17 +121,15 @@ const createBet = async (req,res,next)=>{
         sess.commitTransaction();
       } catch (e) {
         console.log(e);
-        const err = new HttpError("Creating bet failed, please try again.", 500);
+        const err = new HttpError("Creating bet failed due to internal server issue, please try again.", 500);
         return next(err);
       }
 
       // Return room/bet
 
-      res.send(newRoom.toJSON());
+      res.send({room:newRoom.toJSON(),bet:newBet.toJSON()});
     } catch (error) {
-
-        console.log(error);
-        const err = new HttpError("Creating bet failed, please try again later.", 500);
+        const err = new HttpError("Creating bet failed due to internal server issue, please try again later.", 500);
         return next(err);
     }
     
@@ -103,7 +141,7 @@ const matchBet = async (req,res,next)=>{
   try {
     // matchedBetID
     const matchedBetID = req.params.betID;
-    const matchedBet = await Bet.findById(matchedBetID);
+    const matchedBet = await Bet.findById(matchedBetID).populate("room")
     const user = await User.findById(req.userData.id);
     // If matchedBet not found
     if (!matchedBet) {
@@ -125,7 +163,10 @@ const matchBet = async (req,res,next)=>{
       return next(new HttpError("Another bet has already matched this bet, please try other bets.", 422));
     }
     // Get Bet room and check if room is still open for bets
-    const room = await Room.findById(matchedBet.room);
+    const room = matchedBet.room
+    if(!room){
+      return next(new HttpError("The room in which the bet is to be matched doesn't exist.", 422))
+    }
     if (!(room.endTime.valueOf() > new Date().valueOf()) || room.winner != undefined) {
       return next(new HttpError("The time has ended for betting in this room.", 422));
     }
@@ -177,14 +218,13 @@ const matchBet = async (req,res,next)=>{
 
     res.send({ room: room.toJSON(), matchedBet: matchedBet.toJSON(), newBet: newBet.toJSON() });
   } catch (error) {
-    console.log(error);
-     const err = new HttpError("Matching bet failed, please try again.", 500);
+     const err = new HttpError("Matching bet failed due to internal server issue, please try again.", 500);
      return next(err);
   }
   
 }
 
-
+// Function for creating a sub bet
 const createSubBet = async (req,res,next)=>{
   try {
     // Input validation
@@ -207,6 +247,9 @@ const createSubBet = async (req,res,next)=>{
 
     // Get Room
     const room = await Room.findById(req.params.roomID);
+    if(!room){
+      return next(new HttpError("The room to create bet in doesn't exist.", 422))
+    }
 
     if (!(room.endTime.valueOf() > new Date().valueOf()) || room.winner != undefined) {
       return next(
@@ -248,19 +291,134 @@ const createSubBet = async (req,res,next)=>{
     sess.commitTransaction();
 
 
-    res.send(room.toJSON())
+    res.send({ room: room.toJSON(), subBet: newBet.toJSON()})
 
   } catch (error) {
-    console.log(error);
-    const err = new HttpError("Creating sub-bet failed, please try again later.", 500);
+    const err = new HttpError("Creating sub-bet failed due to internal server issue, please try again later.", 500);
     return next(err);
   }
+}
+
+
+// Function for editing a bet
+const editBet = async (req,res,next)=>{
+
+  try {
+
+    // Validating Request For Edit
+    const { amount, side} = req.body;
+    const bet = await (await Bet.findById(req.params.id)).populate("room")
+    const user = await User.findById(req.userData.id)
+
+    
+    // If edit is possible, 
+    // then previously frozen balance needs to be added to wallet as new amount is 
+    // the substitute of the old amount as well 
+
+    if (user.wallet + bet.amountBet  - amount < 0) {
+      return next(new HttpError("The bet amount placed is more than that available in your wallet.", 422));
+    }
+
+
+    // Validate user, room and bet
+    const room = bet.room
+    let valid
+    try {
+      
+      valid = await validateBetForEditAndDelete(user,bet,room)
+    } catch (error) {
+      return next(error)
+    }
+
+    if(valid){
+      // Change the Bet's data (amount and side)
+      const prevAmountBet = bet.amountBet;
+      bet.amountBet = amount
+      bet.side = side
+
+      // Change the User's data (wallet and frozen wallet + previous frozen)
+      user.wallet += prevAmountBet
+      user.wallet -= amount
+
+      user.frozenWallet -= prevAmountBet
+      user.frozenWallet += amount
+
+      const sess = await mongoose.startSession()
+      sess.startTransaction()
+      await user.save({session:sess})
+      await bet.save({session:sess})
+      sess.commitTransaction()
+
+      res.send({ bet: bet.toJSON()})
+    }
+
+  } catch (error) {
+    return next(new HttpError("Editing bet failed due to internal server error, please try again later.", 500))
+  }
+
+
+}
+
+
+
+// Function for deliting a bet
+const deleteBet = async (req, res, next) => {
+    try {
+      // Validate user, room and bet
+
+      const bet = await Bet.findById(req.params.id).populate("room")
+      const user = await User.findById(req.userData.id).populate("bets")
+      const room = bet.room
+      let valid
+      try {
+
+        valid = await validateBetForEditAndDelete(user, bet, room)
+      } catch (error) {
+        return next(error)
+      }
+
+      if (valid) {
+
+        // Change the User's data (wallet and frozen wallet) / remove the bet from users bet
+        user.wallet += bet.amountBet
+        user.frozenWallet -= bet.amountBet
+        user.bets.pull(bet)
+        // Remove bet and bettor(conditional) from room
+        room.bets.pull(bet)
+        const usersBetRooms = []
+
+        for (i = 0; i < user.bets.length;i++){
+          usersBetRooms.push(user.bets[i].room.toString())
+        }
+        
+        if (!(usersBetRooms.includes(room.id.toString()))){
+          room.bettors.pull(user)
+          user.rooms.pull(room)
+        }
+
+        const sess = await mongoose.startSession()
+        sess.startTransaction()
+        await user.save({ session: sess })
+        await bet.remove({ session: sess })
+        await room.save({ session: sess })
+        sess.commitTransaction()
+
+        res.send({ bet: bet.toJSON() })
+      }
+    } catch (error) {
+      console.log(error);
+      return next(new HttpError("Deleting bet failed due to internal server error, please try again later.", 500))
+    }
 }
 
 
 
 
 
+exports.allBets = allBets
+exports.aBet = aBet
 exports.createBet = createBet
 exports.matchBet = matchBet;
 exports.createSubBet = createSubBet;
+exports.editBet = editBet;
+exports.deleteBet = deleteBet;

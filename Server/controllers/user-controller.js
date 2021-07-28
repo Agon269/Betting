@@ -39,8 +39,7 @@ const login = async(req,res,next)=>{
     res.status(201).json({ user: existingUser.toJSON(), token });
 
   } catch (error) {
-    console.log(error);
-    const err = new HttpError("Logging in failed, please try again later.", 500);
+    const err = new HttpError("Logging in failed due to internal server issue, please try again later.", 500);
     return next(err);
   }
 
@@ -94,8 +93,7 @@ const register = async (req, res, next) => {
 
 
   } catch (error) {
-    console.log(error);
-    const err = new HttpError("Registering failed, please try again later.", 500);
+    const err = new HttpError("Registering failed due to internal server issue, please try again later.", 500);
     return next(err);
   }
     
@@ -106,7 +104,8 @@ const register = async (req, res, next) => {
 
 const getUser = async (req,res,next)=>{
 
-  res.status(200).json({user:req.userData})
+  const user = await User.findById(req.userData.id)
+  res.status(200).json({ user: user})
   
 }
 

@@ -19,7 +19,7 @@ router.post(
 router.post("/login", [check("username").not().isEmpty(), check("password").not().isEmpty()], userController.login);
 
 
-// Test route, remove after auth test
+// Route to get user data
 router.get("/", authenCheck, userController.getUser);
 
 
