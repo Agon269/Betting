@@ -12,3 +12,8 @@ export const SEARCH = "SEARCH";
 
 export const SIGNOUT = "SIGNOUT";
 export const GETUSER = "GETUSER";
+//============================= Alert types =================
+
+export const SUCCESS = "SUCCESS";
+export const FAILED = "FAILED";
+export const DISMISS = "DISMISS";

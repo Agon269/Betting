@@ -8,7 +8,8 @@ import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import AuthModal from "./AuthModal";
 import { connect } from "react-redux";
 import { Button, Box } from "@material-ui/core";
-
+import routeTo from "../util/btnrouting";
+import { signOut } from "../actions/auth-actions";
 //later if we have a logo
 // import IconButton from "@material-ui/core/IconButton";
 // import MenuIcon from "@material-ui/icons/Menu";
@@ -37,8 +38,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
 }));
-
-const Header = ({ user }) => {
+const Header = ({ user, signOut }) => {
   const classes = useStyles();
   return (
     <>
@@ -50,15 +50,24 @@ const Header = ({ user }) => {
           justifyContent="space-between"
           className={classes.bar}
         >
-          <Typography variant="h6" className={classes.title}>
+          <Typography
+            variant="h6"
+            className={classes.title}
+            onClick={() => routeTo("/")}
+          >
             Betty
           </Typography>
 
-          <Button className={classes.userIcon}>All bets</Button>
+          <Button className={classes.userIcon} onClick={() => routeTo("/bet")}>
+            All bets
+          </Button>
           {user.isSignedIn === true ? (
             <>
-              <Button className={classes.btn}>Sign out</Button>
+              <Button className={classes.btn} onClick={() => signOut()}>
+                Sign out
+              </Button>
               <IconButton
+                onClick={() => routeTo("/user")}
                 aria-label="upload picture"
                 className={classes.userIcon}
                 component="span"
@@ -81,4 +90,4 @@ const Header = ({ user }) => {
 const mapStateToProps = (state) => {
   return { user: state.user };
 };
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, { signOut })(Header);

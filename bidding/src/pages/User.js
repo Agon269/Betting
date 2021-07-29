@@ -10,6 +10,7 @@ import MyCard from "../components/MyCard";
 import UserTable from "../components/UserTable";
 import { connect } from "react-redux";
 import { getUserBets } from "../actions";
+
 const User = ({ getUserBets, bets, user }) => {
   const useStyles = makeStyles((theme) => ({
     userHeader: {

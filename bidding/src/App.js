@@ -3,17 +3,21 @@ import Header from "./components/Header";
 import User from "./pages/User";
 import BetPage from "./pages/BetPage";
 import Home from "./pages/Home";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Router, Switch, Route, Redirect } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import Message from "./components/Message";
+import history from "./history";
 
 function App() {
   return (
-    <Router>
+    <Router history={history}>
       <Header />
+      <Message />
       <Switch>
-        <Route path="/" exact component={Home} />
+        <Route exact path="/" component={Home} />
         <ProtectedRoute exact path="/user" component={User} />
-        <Route path="/bet" component={BetPage} />
+        <Route exact path="/bet" component={BetPage} />
+        <Redirect from="*" to="/404" />
       </Switch>
     </Router>
   );

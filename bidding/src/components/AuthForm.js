@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+
 import { Field, reduxForm } from "redux-form";
 import Input from "./Input";
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +32,7 @@ const AuthForm = (props) => {
             type="text"
             component={Input}
             label="User Name"
+            autoComplete="username"
           />
         </Box>
         <Box>
@@ -39,12 +41,14 @@ const AuthForm = (props) => {
             component={Input}
             label="Password"
             type="password"
+            autoComplete="password"
           />
         </Box>
         <Button
           variant="contained"
           className={classes.confirmBtn}
           type="submit"
+          disabled={props.pristine || props.submitting}
         >
           Submit
         </Button>

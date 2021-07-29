@@ -14,7 +14,7 @@ function BetPage({ bet, getBet }) {
   useEffect(() => {
     getBet();
   }, [getBet]);
-  console.log(bet);
+
   const useStyles = makeStyles((theme) => ({
     cont: {
       marginTop: "30px",
@@ -55,7 +55,7 @@ function BetPage({ bet, getBet }) {
           Bet title
         </Typography>
         <Box maxWidth="600px">
-          <Typography variant="subtitle">
+          <Typography variant="subtitle1">
             Bet Lorem Ipsum is simply dummy text of the printing and typesetting
             industry. Lorem Ipsum has been the industry's standard dummy text
             ever since the 1500s, when an unknown printer took a galley of type

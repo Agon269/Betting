@@ -7,7 +7,7 @@ const INTITAL_STATE = {
 const userReducer = (state = INTITAL_STATE, action) => {
   switch (action.type) {
     case SIGNOUT:
-      return { ...state, isSignedIn: false, user: null };
+      return { ...state, isSignedIn: false, currentUser: null };
     case GETUSER:
       let user = { ...action.payload };
       return { ...state, isSignedIn: true, currentUser: user };

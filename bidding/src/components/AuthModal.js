@@ -32,6 +32,9 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     top: theme.spacing(5),
   },
+  formTitle: {
+    fontSize: "32px",
+  },
 }));
 
 const AuthModal = ({ type, signUp, signIn }) => {
@@ -75,7 +78,7 @@ const AuthModal = ({ type, signUp, signIn }) => {
         classes={{ paper: classes.dialog }}
       >
         <DialogTitle id="form-dialog-title" className={classes.formHead}>
-          <Typography variant="h4">
+          <Typography className={classes.formTitle}>
             {type === "signin" ? "Sign In" : "Sign up"}
           </Typography>
         </DialogTitle>

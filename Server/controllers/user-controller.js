@@ -105,6 +105,7 @@ const register = async (req, res, next) => {
 const getUser = async (req,res,next)=>{
 
   const user = await User.findById(req.userData.id)
+
   res.status(200).json({ user: user})
   
 }
