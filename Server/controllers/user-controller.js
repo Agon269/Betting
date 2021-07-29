@@ -3,6 +3,7 @@ const HttpError = require("../models/http-error")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const { validationResult } = require("express-validator");
+const MYCONSTANTS = require("../constants")
 
 
 const login = async(req,res,next)=>{
@@ -23,20 +24,20 @@ const login = async(req,res,next)=>{
 
     let existingUser = await User.findOne({username})
     if(!existingUser){
-      const err = new HttpError("Invalid credentials, logging in failed", 401);
+      const err = new HttpError("Wrong credentials, logging in failed", 401);
       return next(err);
     }
 
     let validPassword = await bcrypt.compare(password, existingUser.password);
 
     if(!validPassword){
-      const err = new HttpError("Invalid credentials, logging in failed", 401);
+      const err = new HttpError("Wrong credentials, logging in failed", 401);
       return next(err);
     }
 
     let token = jwt.sign(existingUser.toJSON(), process.env.JWT_KEY, { expiresIn: "24h" });
 
-    res.status(201).json({ user: existingUser.toJSON(), token });
+    res.status(200).json({ user: existingUser.toJSON(), token });
 
   } catch (error) {
     const err = new HttpError("Logging in failed due to internal server issue, please try again later.", 500);
@@ -61,7 +62,9 @@ const register = async (req, res, next) => {
     
     // check if user with same username exists or no
 
-    const {  username, password } = req.body;
+
+    const { username, password } = req.body;
+
 
     let existingUser = await User.findOne({ username });
     if (existingUser) {
@@ -78,7 +81,7 @@ const register = async (req, res, next) => {
     const newUser = new User({
       username,
       password: hashedPass,
-      wallet: 5000,
+      wallet: MYCONSTANTS.WALLET_INIT,
       frozenWallet: 0,
       bets: [],
       rooms: [],
@@ -101,12 +104,34 @@ const register = async (req, res, next) => {
 
 };
 
-
+// get current user for jwt
 const getUser = async (req,res,next)=>{
 
-  const user = await User.findById(req.userData.id)
-  res.status(200).json({ user: user})
+  try {
+    const user = req.userData
+    res.status(200).json({ user: user })
+  } catch (error) {
+    const err = new HttpError("Internal server issue, please try again later.", 500);
+    return next(err);
+  }
   
+  
+}
+
+
+
+
+// get current user from DB using jwt
+const getUserData = async (req, res, next) => {
+
+  try {
+    const user = await User.findById(req.userData.id)
+    res.status(200).json({ user: user })
+  } catch (error) {
+    const err = new HttpError("Internal server issue, please try again later.", 500);
+    return next(err);
+  }
+
 }
 
 
@@ -116,3 +141,4 @@ const getUser = async (req,res,next)=>{
 exports.login = login;
 exports.register = register;
 exports.getUser = getUser;
+exports.getUserData = getUserData;
