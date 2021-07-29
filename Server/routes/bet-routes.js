@@ -8,11 +8,12 @@ const router = Router()
 
 
 // Route to get all bets
-
 router.get("/", betController.allBets)
 
 // Route to get a bet
-router.get("/:id", betController.aBet)
+router.get("/bet/:id", betController.aBet)
+
+
 
 
 // Route to create a new room with bet
@@ -47,7 +48,7 @@ router.post(
 
 
 // Route to edit a bet in a room
-router.put("/:id", authenCheck, [
+router.put("/bet/:id", authenCheck, [
   check("amount").isFloat({ min: MYCONSTANTS.MIN_BID_AMOUNT, max: MYCONSTANTS.MAX_BID_AMOUNT }),
   check("side").isBoolean(),
 ], betController.editBet)
@@ -55,7 +56,7 @@ router.put("/:id", authenCheck, [
 
 // Route to delete a bet
 
-router.delete("/:id", authenCheck, betController.deleteBet)
+router.delete("/bet/:id", authenCheck, betController.deleteBet)
 
 
 module.exports = router

@@ -31,6 +31,9 @@ try {
 const aBet = async (req, res, next) => {
 
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return next(new HttpError("The room with the id doesn't exist.", 422))
+    }
     const bet = await Bet.findById(req.params.id).populate("room").populate("opposingBet")
     if(!bet){
       return next(new HttpError("The bet with the id doesn't exist.", 422))
