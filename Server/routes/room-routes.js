@@ -8,10 +8,15 @@ const router = Router()
 
 // Route to get all rooms
 
-router.get("/", roomController.allRooms)
+router.get("/allrooms", roomController.allRooms)
+
+
+// Route to get all open rooms
+
+router.get("/openrooms", roomController.openRooms)
 
 // Route to get a room
-router.get("/:id", roomController.roomById)
+router.get("/room/:id", roomController.roomById)
 
 
 module.exports = router

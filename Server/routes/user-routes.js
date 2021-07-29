@@ -23,5 +23,9 @@ router.post("/login", [check("username").not().isEmpty(), check("password").not(
 router.get("/", authenCheck, userController.getUser);
 
 
+// Route to get user data
+router.get("/userdata", authenCheck, userController.getUserData);
+
+
 
 module.exports = router
