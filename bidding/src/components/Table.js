@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Container, TableSortLabel, Typography } from "@material-ui/core";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,7 +15,9 @@ import {
 import Row from "./Row";
 import SearchBar from "./SearchBar";
 import { heads } from "../util/bets";
-import { getBets, ascSort, dscSort, search } from "../actions";
+import { ascSort, dscSort, search } from "../actions/sort-actions";
+import { getBets } from "../actions";
+
 const useStyles = makeStyles((theme) => ({
   heads: {
     color: " #9400D3",

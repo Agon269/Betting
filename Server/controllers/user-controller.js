@@ -62,7 +62,9 @@ const register = async (req, res, next) => {
     
     // check if user with same username exists or no
 
+
     const { username, password } = req.body;
+
 
     let existingUser = await User.findOne({ username });
     if (existingUser) {

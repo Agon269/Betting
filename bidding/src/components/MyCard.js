@@ -31,16 +31,24 @@ const MyCard = ({ head, number, type }) => {
   }));
   const classes = useStyles();
   const icon = (type) => {
-    if (type === "money")
-      return <AttachMoneyIcon className={classes.statIcon} />;
-    if (type === "won") return <CheckIcon className={classes.statIcon} />;
-    if (type === "lost") return <CloseIcon className={classes.statIcon} />;
-    if (type === "bet") return <CallMadeIcon className={classes.statIcon} />;
-    if (type === "date")
-      return <EventBusySharpIcon className={classes.statIcon} />;
-    if (type === "people")
-      return <PeopleOutlineIcon className={classes.statIcon} />;
+    switch (type) {
+      case "money":
+        return <AttachMoneyIcon className={classes.statIcon} />;
+      case "won":
+        return <CheckIcon className={classes.statIcon} />;
+      case "lost":
+        return <CloseIcon className={classes.statIcon} />;
+      case "date":
+        return <EventBusySharpIcon className={classes.statIcon} />;
+      case "bet":
+        return <CallMadeIcon className={classes.statIcon} />;
+      case "people":
+        return <PeopleOutlineIcon className={classes.statIcon} />;
+      default:
+        return null;
+    }
   };
+
   return (
     <Card className={classes.myCard} elevation={3}>
       <CardContent>

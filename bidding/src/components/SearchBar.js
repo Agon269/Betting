@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, InputBase } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -22,11 +22,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 const SearchBar = ({ search, userSearched }) => {
   const classes = useStyles();
-  const [searchText, setSearchText] = useState("");
+  // const [searchText, setSearchText] = useState("");
   const searchHandler = (text) => {
     userSearched();
     search(text);
-    setSearchText("");
+    // setSearchText("");
   };
   return (
     <Box className={classes.searchBox}>

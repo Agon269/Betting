@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "20px",
   },
 }));
+//because it rerenders on every change and redux form creates a problem
 
 const Input = ({
   input,
