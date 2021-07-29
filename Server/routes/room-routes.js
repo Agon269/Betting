@@ -18,5 +18,8 @@ router.get("/openrooms", roomController.openRooms)
 // Route to get a room
 router.get("/room/:id", roomController.roomById)
 
+// Route to get a room
+router.put("/decidewinner/:id",authenCheck, check("winner").isBoolean(), roomController.decideWinner)
+
 
 module.exports = router
