@@ -13,7 +13,7 @@ router.get("/", betController.allBets)
 // Route to get a bet
 router.get("/bet/:id", betController.aBet)
 
-
+// 
 
 
 // Route to create a new room with bet
