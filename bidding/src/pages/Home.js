@@ -4,7 +4,7 @@ import MyTable from "../components/Table";
 import { connect } from "react-redux";
 import { getBets } from "../actions";
 import Loading from "../components/Loading";
-const Home = ({ getBets, bets }) => {
+const Home = ({ getBets, bets, user }) => {
   //fetching bets
   useEffect(() => {
     getBets();
@@ -14,13 +14,13 @@ const Home = ({ getBets, bets }) => {
   }
   return (
     <>
-      <Intro />
+      <Intro user={user} />
       <MyTable bets={bets} />
     </>
   );
 };
 const mapStateToProps = (state) => {
   let bets = Object.values(state.bets);
-  return { bets };
+  return { bets, user: state.user };
 };
 export default connect(mapStateToProps, { getBets })(Home);

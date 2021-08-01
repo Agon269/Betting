@@ -77,8 +77,7 @@ const Header = ({ user, signOut }) => {
             </>
           ) : (
             <>
-              <AuthModal type={"signin"} />
-              <AuthModal type={"signup"} />
+              <AuthModal type={"sign in"} />
             </>
           )}
         </Box>

@@ -5,18 +5,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import { Typography, Box } from "@material-ui/core";
 import AuthForm from "./AuthForm";
 import { connect } from "react-redux";
 import { signIn, signUp } from "../actions/auth-actions";
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(0),
-  },
-  confirmBtn: {
-    backgroundColor: "transparent",
-    color: "#9400D3",
-    borderColor: "#9400D3",
   },
   popBtn: {
     color: "white",
@@ -35,11 +30,18 @@ const useStyles = makeStyles((theme) => ({
   formTitle: {
     fontSize: "32px",
   },
+  out: {
+    backgroundColor: "transparent",
+    marginLeft: "5px",
+    color: "#9400D3",
+    borderColor: "#9400D3",
+    marginTop: "10px",
+  },
 }));
 
-const AuthModal = ({ type, signUp, signIn }) => {
+const AuthModal = ({ signUp, signIn, st }) => {
   const classes = useStyles();
-
+  const [formType, setFormType] = React.useState("sign in");
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -47,28 +49,23 @@ const AuthModal = ({ type, signUp, signIn }) => {
   };
 
   const handleClose = () => {
+    setFormType("sign in");
     setOpen(false);
   };
 
   const onSubmit = (formValues) => {
-    if (type === "signin") signIn(formValues);
+    if (formType === "sign in") signIn(formValues);
     else signUp(formValues);
   };
   return (
     <div>
-      {type === "signin" ? (
-        <Button className={classes.popBtn} onClick={handleClickOpen}>
-          Sign in
-        </Button>
-      ) : (
-        <Button
-          variant={"outlined"}
-          className={classes.popBtn}
-          onClick={handleClickOpen}
-        >
-          Sign up
-        </Button>
-      )}
+      <Button
+        variant={"outlined"}
+        className={st ? classes.out : classes.popBtn}
+        onClick={handleClickOpen}
+      >
+        Sign in
+      </Button>
 
       <Dialog
         open={open}
@@ -79,7 +76,7 @@ const AuthModal = ({ type, signUp, signIn }) => {
       >
         <DialogTitle id="form-dialog-title" className={classes.formHead}>
           <Typography className={classes.formTitle}>
-            {type === "signin" ? "Sign In" : "Sign up"}
+            {formType === "sign in" ? "Sign In" : "Sign up"}
           </Typography>
         </DialogTitle>
         <DialogContent>
@@ -87,6 +84,17 @@ const AuthModal = ({ type, signUp, signIn }) => {
             Welcome to Betty Join us in our journey to make the best betting app
           </DialogContentText>
           <AuthForm onSubmit={onSubmit} />
+          <Box textAlign="center" marginTop="30px">
+            {formType === "sign in" ? (
+              <Typography onClick={() => setFormType("sign up")}>
+                Don't have an account ?
+              </Typography>
+            ) : (
+              <Typography onClick={() => setFormType("sign in")}>
+                Already have an account ?
+              </Typography>
+            )}
+          </Box>
         </DialogContent>
       </Dialog>
     </div>
