@@ -32,11 +32,11 @@ const aBet = async (req, res, next) => {
 
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return next(new HttpError("The room with the id doesn't exist.", 422))
+      return next(new HttpError("The bet with the id doesn't exist.", 404));
     }
     const bet = await Bet.findById(req.params.id).populate("room").populate("opposingBet")
     if(!bet){
-      return next(new HttpError("The bet with the id doesn't exist.", 422))
+      return next(new HttpError("The bet with the id doesn't exist.", 404));
     }
     res.send({ bet: bet })
   } catch (error) {
@@ -130,7 +130,7 @@ const createBet = async (req,res,next)=>{
 
       // Return room/bet
 
-      res.send({room:newRoom.toJSON(),bet:newBet.toJSON()});
+      res.status(201).send({room:newRoom.toJSON(),bet:newBet.toJSON()});
     } catch (error) {
         const err = new HttpError("Creating bet failed due to internal server issue, please try again later.", 500);
         return next(err);
@@ -143,12 +143,16 @@ const createBet = async (req,res,next)=>{
 const matchBet = async (req,res,next)=>{
   try {
     // matchedBetID
+    if (!mongoose.Types.ObjectId.isValid(req.params.betID)) {
+      return next(new HttpError("The bet with the id doesn't exist.", 404));
+    }
     const matchedBetID = req.params.betID;
     const matchedBet = await Bet.findById(matchedBetID).populate("room")
     const user = await User.findById(req.userData.id);
     // If matchedBet not found
+    
     if (!matchedBet) {
-      return next(new HttpError("The bet to be matched doesn't exist.", 422));
+      return next(new HttpError("The bet to be matched doesn't exist.", 404));
     }
 
     // =========== Validation of Bets before matching
@@ -163,7 +167,12 @@ const matchBet = async (req,res,next)=>{
     }
     // Check if Bet already matched or no
     if (matchedBet.opposingBet) {
-      return next(new HttpError("Another bet has already matched this bet, please try other bets.", 422));
+      const opp = await Bet.findById(matchedBet.opposingBet)
+      if (opp.bettor.toString() === user.id.toString()){
+        return next(new HttpError("You already matched this bet, please try other bets.", 422));
+
+      }
+        return next(new HttpError("Another bet has already matched this bet, please try other bets.", 422));
     }
     // Get Bet room and check if room is still open for bets
     const room = matchedBet.room
@@ -219,8 +228,9 @@ const matchBet = async (req,res,next)=>{
     await user.save({ session: sess });
     sess.commitTransaction();
 
-    res.send({ room: room.toJSON(), matchedBet: matchedBet.toJSON(), newBet: newBet.toJSON() });
+    res.status(201).send({ room: room.toJSON(), matchedBet: matchedBet.toJSON(), newBet: newBet.toJSON() });
   } catch (error) {
+    console.log(error)
      const err = new HttpError("Matching bet failed due to internal server issue, please try again.", 500);
      return next(err);
   }
@@ -249,9 +259,12 @@ const createSubBet = async (req,res,next)=>{
     }
 
     // Get Room
+    if (!mongoose.Types.ObjectId.isValid(req.params.roomID)) {
+      return next(new HttpError("The room with the id doesn't exist.", 404));
+    }
     const room = await Room.findById(req.params.roomID);
     if(!room){
-      return next(new HttpError("The room to create bet in doesn't exist.", 422))
+      return next(new HttpError("The room to create bet in doesn't exist.", 404));
     }
 
     if (!(room.endTime.valueOf() > new Date().valueOf()) || room.winner != undefined) {
@@ -294,7 +307,7 @@ const createSubBet = async (req,res,next)=>{
     sess.commitTransaction();
 
 
-    res.send({ room: room.toJSON(), subBet: newBet.toJSON()})
+    res.status(201).send({ room: room.toJSON(), subBet: newBet.toJSON() });
 
   } catch (error) {
     const err = new HttpError("Creating sub-bet failed due to internal server issue, please try again later.", 500);
@@ -309,10 +322,17 @@ const editBet = async (req,res,next)=>{
   try {
 
     // Validating Request For Edit
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return next(new HttpError("The bet with the id doesn't exist.", 404));
+    }
     const { amount, side} = req.body;
     const bet = await (await Bet.findById(req.params.id)).populate("room")
     const user = await User.findById(req.userData.id)
-
+    
+    if(!bet){
+      
+      return next(new HttpError("The bet with the id doesn't exist.", 404));
+    }
     
     // If edit is possible, 
     // then previously frozen balance needs to be added to wallet as new amount is 
@@ -368,7 +388,9 @@ const editBet = async (req,res,next)=>{
 const deleteBet = async (req, res, next) => {
     try {
       // Validate user, room and bet
-
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return next(new HttpError("The bet with the id doesn't exist.", 404));
+      }
       const bet = await Bet.findById(req.params.id).populate("room")
       const user = await User.findById(req.userData.id).populate("bets")
       const room = bet.room
@@ -409,7 +431,6 @@ const deleteBet = async (req, res, next) => {
         res.send({ bet: bet.toJSON() })
       }
     } catch (error) {
-      console.log(error);
       return next(new HttpError("Deleting bet failed due to internal server error, please try again later.", 500))
     }
 }
