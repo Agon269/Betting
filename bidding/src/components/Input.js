@@ -12,13 +12,31 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "10px",
   },
   error: {
-    border: "1px solid red ",
+    border: "1px solid red",
     borderRadius: "4px",
     width: "100%",
     marginTop: theme.spacing(1),
     padding: theme.spacing(2),
     marginBottom: "5px",
     height: "6vh",
+
+    "&:focus": {
+      outline: "none!important",
+      border: "1px solid #9400D3!important",
+    },
+  },
+  errorArea: {
+    border: "1px solid red",
+    borderRadius: "4px",
+    width: "100%",
+    marginTop: theme.spacing(1),
+    padding: theme.spacing(2),
+    marginBottom: "5px",
+
+    "&:focus": {
+      outline: "none!important",
+      border: "1px solid #9400D3!important",
+    },
   },
   inputCont: {
     width: "100%",
@@ -28,6 +46,19 @@ const useStyles = makeStyles((theme) => ({
     color: "Red",
     marginBottom: "20px",
   },
+  textArea: {
+    width: "100%",
+    border: "1px solid #9400D3 ",
+    padding: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    borderRadius: "4px",
+    marginBottom: "10px",
+    font: "inherit",
+    "&:focus": {
+      outline: "none!important",
+      border: "1px solid #9400D3!important",
+    },
+  },
 }));
 //because it rerenders on every change and redux form creates a problem
 
@@ -36,26 +67,44 @@ const Input = ({
   label,
   type,
   meta: { touched, invalid, error },
+  des,
   ...custom
 }) => {
   const classes = useStyles();
-
-  return (
-    <Box className={classes.inputCont}>
-      <label>{label}</label>
-      <InputBase
-        label={label}
-        type={type}
-        error={(touched && invalid) || (touched && error)}
-        className={error && touched ? classes.error : classes.text}
-        {...input}
-        {...custom}
-        required
-      />
-      <Typography className={classes.errorText}>
-        {error && touched ? error : ""}
-      </Typography>
-    </Box>
-  );
+  if (des) {
+    return (
+      <Box className={classes.inputCont}>
+        <label>{label}</label>
+        <textarea
+          className={error && touched ? classes.errorArea : classes.textArea}
+          required
+          rows="3"
+          {...custom}
+          {...input}
+        />
+        <Typography className={classes.errorText}>
+          {error && touched ? error : ""}
+        </Typography>
+      </Box>
+    );
+  } else {
+    return (
+      <Box className={classes.inputCont}>
+        <label>{label}</label>
+        <InputBase
+          label={label}
+          type={type}
+          error={(touched && invalid) || (touched && error)}
+          className={error && touched ? classes.error : classes.text}
+          {...input}
+          {...custom}
+          required
+        />
+        <Typography className={classes.errorText}>
+          {error && touched ? error : ""}
+        </Typography>
+      </Box>
+    );
+  }
 };
 export default Input;

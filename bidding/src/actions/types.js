@@ -17,3 +17,7 @@ export const GETUSER = "GETUSER";
 export const SUCCESS = "SUCCESS";
 export const FAILED = "FAILED";
 export const DISMISS = "DISMISS";
+//============================ Modal Types =================
+export const SIGNINMODAL = "SIGNINMODAL";
+export const SIGNUPMODAL = "SIGNUPMODAL";
+export const CLOSEMODAL = "CLOSEMODAL";
