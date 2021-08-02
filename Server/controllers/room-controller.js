@@ -30,7 +30,7 @@ const openRooms = async (req, res, next) => {
 
     try {
 
-        const rooms = await Room.find({ winner: { $exists: false}}).populate("bets")
+        const rooms = await Room.find({ winner: { $exists: false}}).populate("bets").populate("owner")
 
         res.send({ rooms })
 

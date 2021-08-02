@@ -6,6 +6,7 @@ const roomController = require("../controllers/room-controller")
 const router = Router()
 
 
+
 // Route to get all rooms
 
 router.get("/allrooms", roomController.allRooms)
@@ -19,7 +20,7 @@ router.get("/openrooms", roomController.openRooms)
 router.get("/room/:id", roomController.roomById)
 
 // Route to get a room
-router.put("/decidewinner/:id",authenCheck, check("winner").isBoolean(), roomController.decideWinner)
+router.put("/decidewinner/:id", authenCheck, check("winner").isBoolean(), roomController.decideWinner)
 
 
 module.exports = router
