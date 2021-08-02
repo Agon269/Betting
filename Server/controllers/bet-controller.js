@@ -82,7 +82,7 @@ const createBet = async (req,res,next)=>{
         endTime: new Date(enddate),
         bets: [],
         bettors: [user.id],
-        category: [category],
+        category: category,
         searchKey:"temp"
       });
 

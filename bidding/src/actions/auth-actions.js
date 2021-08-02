@@ -8,7 +8,7 @@ export const signIn = (formVals) => async (dispatch) => {
     const token = res.data.token;
     localStorage.setItem("jwtToken", token);
     dispatch(getUser(token));
-    dispatch(success("Successfully signin in"));
+    dispatch(success("Successfully signed in"));
   } catch (err) {
     //create an error message
     if (err.response) dispatch(failed(err.response.data));
@@ -25,11 +25,12 @@ export const signUp = (formVals) => async (dispatch) => {
     res = await betty.post(`/users/register`, { ...formVals });
     const token = res.data.token;
     localStorage.setItem("jwtToken", token);
-
     dispatch(getUser(token));
+    dispatch(success("Successfully Signed up in"));
   } catch (err) {
     //create an error message
-    console.log(err);
+    dispatch(failed("Something went wrong"));
+
     // dispatch({ type: GET_ERROR, payload: err });
   }
 };

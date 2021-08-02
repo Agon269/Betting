@@ -20,11 +20,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AuthForm = (props) => {
+const AuthForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
   const classes = useStyles();
 
   return (
-    <form autoComplete="off" onSubmit={props.handleSubmit(props.onSubmit)}>
+    <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
       <Box display="flex" className={classes.formGroup}>
         <Box>
           <Field
@@ -48,7 +48,7 @@ const AuthForm = (props) => {
           variant="contained"
           className={classes.confirmBtn}
           type="submit"
-          disabled={props.pristine || props.submitting}
+          disabled={pristine || submitting}
         >
           Submit
         </Button>

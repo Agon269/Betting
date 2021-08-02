@@ -9,8 +9,9 @@ import {
 import MyCard from "../components/MyCard";
 import UserTable from "../components/UserTable";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { getUserBets } from "../actions";
-
+import _ from "lodash";
 const User = ({ getUserBets, bets, user }) => {
   const useStyles = makeStyles((theme) => ({
     userHeader: {
@@ -32,32 +33,37 @@ const User = ({ getUserBets, bets, user }) => {
     // getUserBets(user);
   });
 
-  return (
-    <>
-      <Container component={Paper} className={classes.cont}>
-        <Typography className={classes.userHeader} variant="h4">
-          {user.username}
-        </Typography>
-        <Box
-          display="flex"
-          flexWrap="wrap"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <MyCard head={"Wallet"} number={1000} type={"money"} />
-          <MyCard head={"Bets made"} number={12} type={"bet"} />
-          <MyCard head={"Lost"} number={4} type={"lost"} />
-          <MyCard head={"Won"} number={5} type={"won"} />
-        </Box>
-      </Container>
-      <Container component={Paper} className={classes.tableCont}>
-        <Typography variant="h4" className={classes.tableHeader}>
-          All bets made
-        </Typography>
-        <UserTable />
-      </Container>
-    </>
-  );
+  if (_.isEmpty(user)) {
+    return <Redirect to="/" />;
+  }
+
+  if (!_.isEmpty(user))
+    return (
+      <>
+        <Container component={Paper} className={classes.cont}>
+          <Typography className={classes.userHeader} variant="h4">
+            {user.username}
+          </Typography>
+          <Box
+            display="flex"
+            flexWrap="wrap"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <MyCard head={"Wallet"} number={1000} type={"money"} />
+            <MyCard head={"Bets made"} number={12} type={"bet"} />
+            <MyCard head={"Lost"} number={4} type={"lost"} />
+            <MyCard head={"Won"} number={5} type={"won"} />
+          </Box>
+        </Container>
+        <Container className={classes.tableCont}>
+          <Typography variant="h4" className={classes.tableHeader}>
+            All bets made
+          </Typography>
+          <UserTable />
+        </Container>
+      </>
+    );
 };
 
 const mapStateToProps = (state) => {

@@ -7,6 +7,7 @@ import { Router, Switch, Route, Redirect } from "react-router-dom";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import Message from "./components/Message";
 import history from "./history";
+import CreateBet from "./pages/CreateBet";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={Home} />
         <ProtectedRoute exact path="/user" component={User} />
+        <ProtectedRoute exact path="/createbet" component={CreateBet} />
         <Route exact path="/bet" component={BetPage} />
         <Redirect from="*" to="/404" />
       </Switch>
