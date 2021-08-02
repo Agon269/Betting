@@ -52,12 +52,10 @@ const roomSchema = new Schema(
       },
     ],
     // Category of the room to use for searching
-    category: [
-      {
+    category: {
         type: String,
         required: true,
-      },
-    ],
+      }
   },
   {
     toJSON: {
