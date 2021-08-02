@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   errorText: {
-    fontSize: "10px",
+    fontSize: "15px",
     color: "Red",
     marginBottom: "20px",
   },

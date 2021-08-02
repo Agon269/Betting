@@ -58,13 +58,19 @@ const Header = ({ user, signOut }) => {
             Betty
           </Typography>
 
-          <Button className={classes.userIcon} onClick={() => routeTo("/bet")}>
+          <Button className={classes.userIcon} onClick={() => routeTo("/bets")}>
             All bets
           </Button>
           {user.isSignedIn === true ? (
             <>
               <Button className={classes.btn} onClick={() => signOut()}>
                 Sign out
+              </Button>{" "}
+              <Button
+                className={classes.btn}
+                onClick={() => routeTo("/createbet")}
+              >
+                Create bet
               </Button>
               <IconButton
                 onClick={() => routeTo("/user")}

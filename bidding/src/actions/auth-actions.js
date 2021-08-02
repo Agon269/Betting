@@ -29,7 +29,10 @@ export const signUp = (formVals) => async (dispatch) => {
     dispatch(success("Successfully Signed up in"));
   } catch (err) {
     //create an error message
-    dispatch(failed("Something went wrong"));
+    if (err.response) dispatch(failed(err.response.data));
+    else {
+      dispatch(failed("Something went wrong"));
+    }
 
     // dispatch({ type: GET_ERROR, payload: err });
   }

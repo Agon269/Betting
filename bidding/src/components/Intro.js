@@ -9,6 +9,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AuthModal from "./AuthModal";
+import routeTo from "../util/btnrouting";
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(0),
@@ -60,7 +61,11 @@ export default function Intro({ user }) {
             fugiat deleniti? Eum quasi quidem quibusdam.
           </Typography>
           {user.isSignedIn ? (
-            <Button className={classes.btn} variant="outlined">
+            <Button
+              className={classes.btn}
+              variant="outlined"
+              onClick={() => routeTo("/createbet")}
+            >
               Bet Now
             </Button>
           ) : (

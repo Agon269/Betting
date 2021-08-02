@@ -28,14 +28,13 @@ const BetForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
       <Grid container spacing={8}>
         <Grid item xs={6}>
           <Field name="title" type="text" label="Title" component={Input} />
-          <Field label="Description" name="desc" component={Input} des={true} />
-          <Field label="Your side" name="side1" component={Input} type="text" />
           <Field
-            label="The other side"
-            name="side2"
+            label="Description"
+            name="description"
             component={Input}
-            type="text"
+            des={true}
           />
+          <Field label="Your side" name="side" component={Input} type="text" />
         </Grid>
         <Grid item xs={6}>
           <Field
@@ -43,18 +42,20 @@ const BetForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
             name="category"
             component={Input}
             type="text"
-          />
-          <Field
-            label="Start date"
-            name="strtdate"
-            component={Input}
-            type="date"
+            placeholder="sports"
           />
           <Field
             label="Expire date"
-            name="expdate"
+            name="enddate"
             component={Input}
             type="date"
+          />
+          <Field
+            label="Amount to bet"
+            name="amount"
+            component={Input}
+            type="number"
+            placeholder="100"
           />
           <div>
             <Button
@@ -82,14 +83,15 @@ const validate = (formValues) => {
   if (!formValues.category) {
     errors.category = "You must enter category";
   }
-  if (!formValues.side1) {
-    errors.side1 = "You must enter side your side";
+  if (!formValues.side) {
+    errors.side = "You must enter side your side";
   }
-  if (!formValues.side2) {
-    errors.side2 = "You must enter the other side";
+  if (!formValues.amount) {
+    errors.amount = "You must enter side your amount";
   }
-  if (!formValues.desc) {
-    errors.desc = "you must enter description";
+
+  if (!formValues.description) {
+    errors.description = "you must enter description";
   }
 
   return errors;

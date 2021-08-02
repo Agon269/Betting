@@ -16,7 +16,7 @@ import Row from "./Row";
 import SearchBar from "./SearchBar";
 import { heads } from "../util/bets";
 import { ascSort, dscSort, search } from "../actions/sort-actions";
-import { getBets } from "../actions";
+import { getBets } from "../actions/bet-actions";
 
 const useStyles = makeStyles((theme) => ({
   heads: {
@@ -64,7 +64,7 @@ const MyTable = ({ bets, getBets, ascSort, dscSort, search }) => {
   //render bets
   return (
     <Container
-      maxWidth="md"
+      maxWidth="lg"
       className={classes.tableContainer}
       component={Paper}
     >

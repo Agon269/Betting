@@ -10,7 +10,7 @@ import MyCard from "../components/MyCard";
 import UserTable from "../components/UserTable";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { getUserBets } from "../actions";
+import { getUserBets } from "../actions/bet-actions";
 import _ from "lodash";
 const User = ({ getUserBets, bets, user }) => {
   const useStyles = makeStyles((theme) => ({
@@ -60,7 +60,7 @@ const User = ({ getUserBets, bets, user }) => {
           <Typography variant="h4" className={classes.tableHeader}>
             All bets made
           </Typography>
-          <UserTable />
+          {/* <UserTable /> */}
         </Container>
       </>
     );

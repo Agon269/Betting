@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-
+import routeTo from "../util/btnrouting";
 const useRowStyles = makeStyles({
   root: {
     "& > *": {
@@ -55,22 +55,26 @@ const Row = ({ row }) => {
         </TableCell>
         {/* name of row */}
         <TableCell component="th" scope="row">
-          {row.title}
+          {row.room.title}
         </TableCell>
         {/*   properties */}
 
-        <TableCell align="right">{row.creater}</TableCell>
-        <TableCell align="right">{row.expireDate}</TableCell>
-        <TableCell align="right">{row.betAmount}</TableCell>
-        <TableCell align="right">{row.category}</TableCell>
+        <TableCell align="right">{row.bettor}</TableCell>
+        <TableCell align="right">{row.room.endTime}</TableCell>
+        <TableCell align="right">{row.amountBet}</TableCell>
+        <TableCell align="right">{row.room.category[0]}</TableCell>
         <TableCell align="right">
-          <Button className={classes.btn} variant="contained">
-            Bet
+          <Button
+            className={classes.btn}
+            onClick={() => routeTo(`/bet/${row.id}`)}
+            variant="contained"
+          >
+            view bet
           </Button>
         </TableCell>
       </TableRow>
-      {/* more details section for the row */}
-      <TableRow>
+      {/* more details section for the row sub bets here */}
+      {/* <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
@@ -86,21 +90,21 @@ const Row = ({ row }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.subBets.map((subBet) => (
-                    <TableRow key={subBet.creater}>
-                      <TableCell>{subBet.creater}</TableCell>
-                      <TableCell>{subBet.betAmount}</TableCell>
-                      <TableCell>
-                        <Button className={classes.btn}>Bet</Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
+                {row.subBets.map((subBet) => (
+                  <TableRow key={subBet.creater}>
+                    <TableCell>{subBet.creater}</TableCell>
+                    <TableCell>{subBet.betAmount}</TableCell>
+                    <TableCell>
+                      <Button className={classes.btn}>Bet</Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
               </Table>
             </Box>
           </Collapse>
         </TableCell>
-      </TableRow>
+      </TableRow> */}
     </React.Fragment>
   );
 };

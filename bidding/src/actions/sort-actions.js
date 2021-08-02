@@ -4,6 +4,7 @@ import { allBets } from "../util/bets";
 
 export const ascSort = (sortBy) => {
   let sorterProperty = sortProperty(sortBy);
+
   return {
     type: ASCSORT,
     payload: sorterProperty,
