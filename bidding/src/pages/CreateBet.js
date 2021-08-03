@@ -17,8 +17,8 @@ const CreateBet = ({ createBet }) => {
   }));
   const classes = useStyles();
 
-  const onSubmit = (formVales) => {
-    createBet(formVales);
+  const onSubmit = (formValues) => {
+    createBet(formValues);
   };
   return (
     <Container component={Paper} maxWidth="md" className={classes.cont}>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, Box } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Field, reduxForm } from "redux-form";
 import Input from "./Input";
@@ -13,6 +13,8 @@ const useStyles = makeStyles((theme) => ({
   confirmBtn: {
     color: "white",
     marginTop: "10px",
+    marginBottom: "20px",
+
     backgroundColor: "#9400D3",
     "&:hover": {
       backgroundColor: "#9400D3",
@@ -42,6 +44,7 @@ const BetForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
             name="category"
             component={Input}
             type="text"
+            select={true}
             placeholder="sports"
           />
           <Field
@@ -57,19 +60,18 @@ const BetForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
             type="number"
             placeholder="100"
           />
-          <div>
-            <Button
-              type="submit"
-              variant="contained"
-              className={classes.confirmBtn}
-              disabled={pristine || submitting}
-            >
-              Submit
-            </Button>
-            {/* <Button text="Reset" color="default" /> */}
-          </div>
         </Grid>
       </Grid>
+      <Box display="flex" justifyContent="flex-end">
+        <Button
+          type="submit"
+          variant="contained"
+          className={classes.confirmBtn}
+          disabled={pristine || submitting}
+        >
+          Submit
+        </Button>
+      </Box>
     </form>
   );
 };

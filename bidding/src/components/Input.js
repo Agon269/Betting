@@ -1,6 +1,8 @@
 import React from "react";
 import { InputBase, Box, Typography } from "@material-ui/core";
+import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
+import Select from "@material-ui/core/Select";
 const useStyles = makeStyles((theme) => ({
   text: {
     border: "1px solid #9400D3 ",
@@ -40,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   inputCont: {
     width: "100%",
+    marginTop: "20px",
   },
   errorText: {
     fontSize: "15px",
@@ -68,13 +71,14 @@ const Input = ({
   type,
   meta: { touched, invalid, error },
   des,
+  select,
   ...custom
 }) => {
   const classes = useStyles();
   if (des) {
     return (
       <Box className={classes.inputCont}>
-        <label>{label}</label>
+        <label className={classes.labeled}>{label}</label>
         <textarea
           className={error && touched ? classes.errorArea : classes.textArea}
           required
@@ -87,10 +91,28 @@ const Input = ({
         </Typography>
       </Box>
     );
+  } else if (select) {
+    return (
+      <Box className={classes.inputCont}>
+        <label className={classes.labeled}>{label}</label>
+        <select
+          className={error && touched ? classes.error : classes.textArea}
+          {...input}
+          {...custom}
+        >
+          <option value="none">None</option>
+          <option value="politics">Politics</option>
+          <option value="sports">Sports</option>
+          <option value="crypto">Crypto</option>
+          <option value="personal">Personal</option>
+          <option value="other">Other</option>
+        </select>
+      </Box>
+    );
   } else {
     return (
       <Box className={classes.inputCont}>
-        <label>{label}</label>
+        <label className={classes.labeled}>{label}</label>
         <InputBase
           label={label}
           type={type}

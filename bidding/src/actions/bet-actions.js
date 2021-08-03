@@ -1,4 +1,4 @@
-import { GETBETS, GETUSERBETS, GETBET, CREATEBET } from "./types";
+import { GETBETS, GETUSERBETS, GETBET, CREATEBET, EDITBET } from "./types";
 import { allBets } from "../util/bets";
 import betty from "../api/betty";
 import { success, failed } from "./alert-actions";
@@ -14,7 +14,7 @@ export const getBets = () => async (dispatch) => {
   try {
     let res = await betty.get("/bets/");
 
-    dispatch({ type: GETBETS, payload: res.data.bets.slice(140) });
+    dispatch({ type: GETBETS, payload: res.data.bets });
   } catch (err) {
     if (err.response) dispatch(failed(err.response.data));
     else {
@@ -44,9 +44,34 @@ export const createBet = (formValues) => async (dispatch) => {
 
     dispatch({ type: CREATEBET, payload: res.data });
     dispatch(success("Successfully Created bet"));
-    console.log(res.data.room.id);
+
     history.push(`/bet/${res.data.bet.id}`);
     //programatic routing to bet page
+  } catch (err) {
+    if (err.response) dispatch(failed(err.response.data));
+    else {
+      dispatch(failed("Something went wrong"));
+    }
+  }
+};
+export const matchBet = (id) => async (dispatch) => {
+  try {
+    await betty.post(`/bets/matchbet/${id}`);
+    dispatch(success("Successfully Matched bet"));
+    //should route to where
+  } catch (err) {
+    if (err.response) dispatch(failed(err.response.data));
+    else {
+      dispatch(failed("Something went wrong"));
+    }
+  }
+};
+
+export const editBet = (id, changes) => async (dispatch) => {
+  try {
+    let res = await betty.put(`/bets/${id}`, { ...changes });
+    dispatch({ type: EDITBET, payload: res.data });
+    history.push(`/bet/${res.data.id}`);
   } catch (err) {
     if (err.response) dispatch(failed(err.response.data));
     else {

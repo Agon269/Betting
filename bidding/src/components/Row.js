@@ -55,18 +55,18 @@ const Row = ({ row }) => {
         </TableCell>
         {/* name of row */}
         <TableCell component="th" scope="row">
-          {row.room.title}
+          {row.title}
         </TableCell>
         {/*   properties */}
 
-        <TableCell align="right">{row.bettor}</TableCell>
-        <TableCell align="right">{row.room.endTime}</TableCell>
-        <TableCell align="right">{row.amountBet}</TableCell>
-        <TableCell align="right">{row.room.category[0]}</TableCell>
+        <TableCell align="right">{row.owner.username}</TableCell>
+        <TableCell align="right">{row.endTime}</TableCell>
+        <TableCell align="right">{row.bets[0].amountBet}</TableCell>
+        {/* <TableCell align="right">{row.room.category[0]}</TableCell> */}
         <TableCell align="right">
           <Button
             className={classes.btn}
-            onClick={() => routeTo(`/bet/${row.id}`)}
+            onClick={() => routeTo(`/bet/${row.bets[0].id}`)}
             variant="contained"
           >
             view bet
@@ -74,14 +74,14 @@ const Row = ({ row }) => {
         </TableCell>
       </TableRow>
       {/* more details section for the row sub bets here */}
-      {/* <TableRow>
+      <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
                 Sub bets
               </Typography>
-              <Table size="small" aria-label="purchases">
+              <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell>Creater</TableCell>
@@ -90,21 +90,26 @@ const Row = ({ row }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                {row.subBets.map((subBet) => (
-                  <TableRow key={subBet.creater}>
-                    <TableCell>{subBet.creater}</TableCell>
-                    <TableCell>{subBet.betAmount}</TableCell>
-                    <TableCell>
-                      <Button className={classes.btn}>Bet</Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+                  {row.bets.map((subBet) => (
+                    <TableRow key={subBet.id}>
+                      <TableCell>{subBet.bettor}</TableCell>
+                      <TableCell>{subBet.amountBet}</TableCell>
+                      <TableCell>
+                        <Button
+                          className={classes.btn}
+                          onClick={() => routeTo(`/bet/${subBet.id}`)}
+                        >
+                          View bet
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
               </Table>
             </Box>
           </Collapse>
         </TableCell>
-      </TableRow> */}
+      </TableRow>
     </React.Fragment>
   );
 };

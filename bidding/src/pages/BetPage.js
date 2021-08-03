@@ -8,8 +8,9 @@ import {
   Button,
 } from "@material-ui/core";
 import { connect } from "react-redux";
-import { getBet } from "../actions/bet-actions";
+import { getBet, matchBet } from "../actions/bet-actions";
 import MyCard from "../components/MyCard";
+import MatchBetModal from "../components/MatchBetModal";
 const useStyles = makeStyles((theme) => ({
   cont: {
     marginTop: "30px",
@@ -19,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "5px",
     color: "#9400D3",
     borderColor: "#9400D3",
+    marginTop: "20px",
+    marginBottom: "20px",
   },
   userHeader: {
     paddingTop: "40px",
@@ -32,27 +35,22 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: "60px",
     paddingBottom: "40px",
   },
-  btn: {
-    backgroundColor: "#9400D3",
-    marginTop: "20px",
-    marginBottom: "20px",
-    color: "white",
-    "&:hover": {
-      backgroundColor: "#9400D3",
-    },
-  },
 }));
-function BetPage({ bet, getBet, match }) {
+function BetPage({ bet, getBet, match, matchBet }) {
   const { id } = match.params;
 
   useEffect(() => {
     getBet(id);
   }, [getBet, id]);
   const classes = useStyles();
-  console.log(bet);
+
   if (!bet) {
     return <div>Loadding ..</div>;
   }
+
+  const handleMatch = () => {
+    matchBet(id);
+  };
   return (
     <>
       <Container component={Paper} className={classes.cont} maxWidth="md">
@@ -63,7 +61,8 @@ function BetPage({ bet, getBet, match }) {
           <Typography variant="subtitle1">{bet.room.description}</Typography>
         </Box>
         <Box className={classes.btnBox}>
-          <Button className={classes.btn}>Bet against</Button>
+          {bet.opposingBet ? "" : <MatchBetModal action={handleMatch} />}
+
           <Button className={classes.secondBtn} variant="outlined">
             Create a sub bet
           </Button>
@@ -79,8 +78,16 @@ function BetPage({ bet, getBet, match }) {
           justifyContent="space-between"
           alignItems="center"
         >
-          <MyCard head={"People betting"} number={4} type={"people"} />
-          <MyCard head={"Sub bets"} number={3} type={"bet"} />
+          <MyCard
+            head={"People betting"}
+            number={bet.room.bets.length}
+            type={"people"}
+          />
+          <MyCard
+            head={"Sub bets"}
+            number={Math.floor(bet.room.bets.length / 2)}
+            type={"bet"}
+          />
           <MyCard head={"Bet Amount"} number={bet.amountBet} type={"money"} />
           <MyCard head={"End date"} number={bet.room.endTime} type={"date"} />
         </Box>
@@ -99,4 +106,4 @@ const mapStateToProps = (state, ownProps) => {
     user: state.user,
   };
 };
-export default connect(mapStateToProps, { getBet })(BetPage);
+export default connect(mapStateToProps, { getBet, matchBet })(BetPage);
