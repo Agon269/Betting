@@ -5,6 +5,7 @@ export const EDITBET = "EDITBET";
 export const DELETEBET = "DELETEBET";
 export const GETUSERBETS = "GETUSERBETS";
 export const MATCHBET = "MATCHBET";
+export const CREATESUBBET = "CREATESUBBET";
 //=========================== SORT TYPES ==================
 export const ASCSORT = "ASCSORT";
 export const DSCSORT = "DSCSORT";

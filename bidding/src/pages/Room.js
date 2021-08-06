@@ -5,10 +5,10 @@ import {
   Container,
   Box,
   Typography,
-  Button,
 } from "@material-ui/core";
 import { connect } from "react-redux";
 import { getRoom } from "../actions/room-actions";
+import { createSubBet } from "../actions/bet-actions";
 import MyCard from "../components/MyCard";
 import Loading from "../components/Loading";
 import BetTable from "../components/BetTable";
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "40px",
   },
 }));
-function Room({ room, getRoom, match, user }) {
+function Room({ room, getRoom, match, user, createSubBet }) {
   const { id } = match.params;
 
   useEffect(() => {
@@ -51,13 +51,9 @@ function Room({ room, getRoom, match, user }) {
     return <Loading />;
   }
 
-  const handleMatch = () => {
-    console.log(id);
-    // matchBet(id);
-  };
   const creater = (formValues) => {
     //create sub bet here
-    console.log(formValues);
+    createSubBet(id, formValues);
   };
   return (
     <>
@@ -71,9 +67,6 @@ function Room({ room, getRoom, match, user }) {
         {user.isSignedIn ? (
           <Box className={classes.btnBox}>
             <SubBetModal creater={creater} />
-            {/* <Button className={classes.secondBtn} variant="outlined">
-              Create a sub bet
-            </Button> */}
           </Box>
         ) : null}
       </Container>
@@ -113,4 +106,4 @@ const mapStateToProps = (state, ownProps) => {
     user: state.user,
   };
 };
-export default connect(mapStateToProps, { getRoom })(Room);
+export default connect(mapStateToProps, { getRoom, createSubBet })(Room);

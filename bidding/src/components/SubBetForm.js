@@ -9,10 +9,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
   },
   confirmBtn: {
     color: "white",
-    marginTop: "10px",
+    marginTop: "50px",
     backgroundColor: "#9400D3",
     "&:hover": {
       backgroundColor: "#9400D3",
@@ -26,19 +27,23 @@ const SubBetForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
   return (
     <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
       <Box display="flex" className={classes.formGroup}>
-        <Box>
-          <Field
-            name="amount"
-            type="text"
-            component={Input}
-            label="Amount"
-            placeholder="50"
-            autoComplete="amount"
-          />
-        </Box>
-        <Box>
-          <Field name="side" component={Input} label="Side" type="select" />
-        </Box>
+        <Field
+          name="amount"
+          type="number"
+          component={Input}
+          label="Amount"
+          placeholder="50"
+          autoComplete="amount"
+        />
+
+        <Field
+          name="side"
+          select={true}
+          options={["None", "For", "Against"]}
+          component={Input}
+          label="Side"
+        />
+
         <Button
           variant="contained"
           className={classes.confirmBtn}
@@ -58,7 +63,7 @@ const validate = (formValues) => {
   if (!formValues.amount) {
     errors.amount = "You must enter a amount";
   }
-  if (!formValues.side) {
+  if (formValues.side === "None") {
     errors.side = "You must enter side";
   }
   return errors;

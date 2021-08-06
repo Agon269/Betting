@@ -1,4 +1,11 @@
-import { GETBETS, GETUSERBETS, GETBET, CREATEBET, EDITBET } from "./types";
+import {
+  GETBETS,
+  GETUSERBETS,
+  GETBET,
+  CREATEBET,
+  EDITBET,
+  CREATESUBBET,
+} from "./types";
 import { allBets } from "../util/bets";
 import betty from "../api/betty";
 import { success, failed } from "./alert-actions";
@@ -68,10 +75,27 @@ export const matchBet = (id) => async (dispatch) => {
 };
 
 export const editBet = (id, changes) => async (dispatch) => {
+  console.log(id, changes);
   try {
-    let res = await betty.put(`/bets/${id}`, { ...changes });
+    let res = await betty.put(`/bets/bet/${id}`, { ...changes });
     dispatch({ type: EDITBET, payload: res.data });
     history.push(`/bet/${res.data.id}`);
+  } catch (err) {
+    if (err.response) dispatch(failed(err.response.data));
+    else {
+      dispatch(failed("Something went wrong"));
+    }
+  }
+};
+
+export const createSubBet = (id, formVals) => async (dispatch) => {
+  if (formVals.side === "For") formVals.side = true;
+  else if (formVals.side === "Against") formVals.side = false;
+  try {
+    let res = await betty.post(`/bets/createSubBet/${id}`, { ...formVals });
+    dispatch(success("Successfully Created a Sub bet"));
+    dispatch({ type: CREATESUBBET, payload: res.data.subBet });
+    history.push(`/bet/${res.data.subBet.id}`);
   } catch (err) {
     if (err.response) dispatch(failed(err.response.data));
     else {

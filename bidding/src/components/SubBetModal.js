@@ -48,7 +48,6 @@ const SubBetModal = ({ creater }) => {
   };
 
   const onSubmit = (formValues) => {
-    console.log(formValues);
     //submit form
     creater(formValues);
   };
@@ -73,7 +72,7 @@ const SubBetModal = ({ creater }) => {
           <Typography className={classes.formTitle}>Create Sub bet</Typography>
         </DialogTitle>
         <DialogContent>
-          <SubBetForm handleSubmit={onSubmit} />
+          <SubBetForm onSubmit={onSubmit} />
         </DialogContent>
       </Dialog>
     </>

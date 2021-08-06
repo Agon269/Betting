@@ -1,4 +1,4 @@
-import { GETBETS, GETBET, CREATEBET } from "../actions/types";
+import { GETBETS, GETBET, CREATEBET, CREATESUBBET } from "../actions/types";
 
 import _ from "lodash";
 
@@ -8,8 +8,9 @@ const betReducer = (state = {}, action) => {
       return { ...state, ..._.mapKeys(action.payload, "id") };
     case CREATEBET:
       return { ...state, [action.payload.id]: action.payload };
-
     case GETBET:
+      return { ...state, [action.payload.id]: action.payload };
+    case CREATESUBBET:
       return { ...state, [action.payload.id]: action.payload };
 
     default:

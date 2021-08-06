@@ -22,13 +22,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BetForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
+const BetForm = ({ handleSubmit, onSubmit, pristine, submitting, options }) => {
   const classes = useStyles();
 
   return (
     <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={8}>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
           <Field name="title" type="text" label="Title" component={Input} />
           <Field
             label="Description"
@@ -36,15 +36,29 @@ const BetForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
             component={Input}
             des={true}
           />
-          <Field label="Your side" name="side" component={Input} type="text" />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} sm={6}>
+          <Field
+            label="Amount to bet"
+            name="amount"
+            component={Input}
+            type="number"
+            placeholder="100"
+          />
           <Field
             label="Category"
             name="category"
             component={Input}
             type="text"
             select={true}
+            options={[
+              "None",
+              "Politics",
+              "Sports",
+              "Crypto",
+              "Personal",
+              "Other",
+            ]}
             placeholder="sports"
           />
           <Field
@@ -52,13 +66,6 @@ const BetForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
             name="enddate"
             component={Input}
             type="date"
-          />
-          <Field
-            label="Amount to bet"
-            name="amount"
-            component={Input}
-            type="number"
-            placeholder="100"
           />
         </Grid>
       </Grid>

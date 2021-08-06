@@ -12,7 +12,7 @@ import {
 
 import BetRow from "./BetRow";
 import { makeStyles } from "@material-ui/core";
-import { heads } from "../util/bets";
+
 const BetTable = ({ bets }) => {
   const useStyles = makeStyles((theme) => ({
     table: {

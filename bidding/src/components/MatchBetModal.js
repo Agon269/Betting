@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
   popBtn: {
     backgroundColor: "#9400D3",
-    marginTop: "20px",
+    marginTop: "30px",
     marginBottom: "20px",
     color: "white",
     "&:hover": {

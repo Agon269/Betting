@@ -3,7 +3,7 @@ export function mySort(rooms, sortBy, type) {
   //big problems here dont know how to fix it
   let sortedBets = rooms.map((room) => room.bets.sort(dynamicSort(sortBy)));
 
-  if (type === undefined) return rooms;
+  if (type === undefined) return sortedBets;
   let descending = rooms.reverse();
   return descending;
 }

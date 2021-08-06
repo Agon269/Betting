@@ -1,8 +1,8 @@
 import React from "react";
 import { InputBase, Box, Typography } from "@material-ui/core";
-import MenuItem from "@material-ui/core/MenuItem";
+
 import { makeStyles } from "@material-ui/core/styles";
-import Select from "@material-ui/core/Select";
+
 const useStyles = makeStyles((theme) => ({
   text: {
     border: "1px solid #9400D3 ",
@@ -72,6 +72,7 @@ const Input = ({
   meta: { touched, invalid, error },
   des,
   select,
+  options,
   ...custom
 }) => {
   const classes = useStyles();
@@ -82,7 +83,7 @@ const Input = ({
         <textarea
           className={error && touched ? classes.errorArea : classes.textArea}
           required
-          rows="3"
+          rows="6"
           {...custom}
           {...input}
         />
@@ -100,12 +101,11 @@ const Input = ({
           {...input}
           {...custom}
         >
-          <option value="none">None</option>
-          <option value="politics">Politics</option>
-          <option value="sports">Sports</option>
-          <option value="crypto">Crypto</option>
-          <option value="personal">Personal</option>
-          <option value="other">Other</option>
+          {options.map((option) => (
+            <option value={option} key={option}>
+              {option}
+            </option>
+          ))}
         </select>
       </Box>
     );
