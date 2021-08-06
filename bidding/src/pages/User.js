@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import MyCard from "../components/MyCard";
-import UserTable from "../components/UserTable";
+
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { getUserBets } from "../actions/bet-actions";

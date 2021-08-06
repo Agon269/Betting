@@ -37,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
     borderColor: "#9400D3",
     marginTop: "10px",
   },
+  switch: {
+    color: "#9400D3",
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
 }));
 
 const AuthModal = ({ signUp, signIn, st }) => {
@@ -86,12 +92,24 @@ const AuthModal = ({ signUp, signIn, st }) => {
           <AuthForm onSubmit={onSubmit} />
           <Box textAlign="center" marginTop="30px">
             {formType === "sign in" ? (
-              <Typography onClick={() => setFormType("sign up")}>
-                Don't have an account ?
+              <Typography>
+                Don't have an{" "}
+                <span
+                  className={classes.switch}
+                  onClick={() => setFormType("sign up")}
+                >
+                  account ?
+                </span>
               </Typography>
             ) : (
-              <Typography onClick={() => setFormType("sign in")}>
-                Already have an account ?
+              <Typography>
+                Already have an{" "}
+                <span
+                  className={classes.switch}
+                  onClick={() => setFormType("sign in")}
+                >
+                  account ?
+                </span>
               </Typography>
             )}
           </Box>

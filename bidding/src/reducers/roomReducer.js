@@ -1,4 +1,4 @@
-import { GETROOMS, ASCSORT, DSCSORT, SEARCH } from "../actions/types";
+import { GETROOMS, ASCSORT, DSCSORT, SEARCH, GETROOM } from "../actions/types";
 import _ from "lodash";
 import { mySort } from "../services/sort";
 import { search } from "../services/search";
@@ -7,6 +7,8 @@ export const roomReducer = (state = {}, action) => {
   switch (action.type) {
     case GETROOMS:
       return { ...state, ..._.mapKeys(action.payload, "id") };
+    case GETROOM:
+      return { ...state, [action.payload.id]: action.payload };
     case ASCSORT:
       sortedBets = mySort(state, action.payload);
       return { ...sortedBets };

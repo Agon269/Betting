@@ -9,6 +9,7 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import Message from "./components/Message";
 import history from "./history";
 import CreateBet from "./pages/CreateBet";
+import Room from "./pages/Room";
 function App() {
   return (
     <Router history={history}>
@@ -18,8 +19,9 @@ function App() {
         <Route exact path="/" component={Home} />
         <ProtectedRoute exact path="/user" component={User} />
         <ProtectedRoute exact path="/createbet" component={CreateBet} />
-        <ProtectedRoute exact path="/bets" component={Bets} />
+        <Route exact path="/bets" component={Bets} />
         <Route exact path="/bet/:id" component={BetPage} />
+        <Route exact path="/room/:id" component={Room} />
         <Redirect from="*" to="/404" />
       </Switch>
     </Router>

@@ -17,6 +17,7 @@ import SearchBar from "./SearchBar";
 import { heads } from "../util/bets";
 import { ascSort, dscSort, search } from "../actions/sort-actions";
 import { getBets } from "../actions/bet-actions";
+import Loading from "./Loading";
 
 const useStyles = makeStyles((theme) => ({
   heads: {
@@ -61,15 +62,11 @@ const MyTable = ({ rooms, getBets, ascSort, dscSort, search }) => {
     setHasSearched(false);
   };
   //fetchingbets
-  if (rooms.length === 0 && hasSearched === false) return <div>Loading...</div>;
+  if (rooms.length === 0 && hasSearched === false) return <Loading />;
   //render bets
 
   return (
-    <Container
-      maxWidth="lg"
-      className={classes.tableContainer}
-      component={Paper}
-    >
+    <Container className={classes.tableContainer} component={Paper}>
       <Box display="flex" alignItems="center">
         <SearchBar search={search} userSearched={userSearched} />
         {hasSearched && rooms.length === 1 ? (
@@ -86,15 +83,16 @@ const MyTable = ({ rooms, getBets, ascSort, dscSort, search }) => {
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
+              <TableCell></TableCell>
               <TableCell className={classes.heads}>Bet Title</TableCell>
               {heads.map((head) => (
-                <TableCell key={head} align="right">
+                <TableCell key={head}>
                   <TableSortLabel onClick={() => stableSort(head)}>
                     {head}
                   </TableSortLabel>
                 </TableCell>
               ))}
-              <TableCell align="right">Action</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           {rooms.length === 0 && hasSearched ? (

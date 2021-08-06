@@ -24,3 +24,4 @@ export const SIGNUPMODAL = "SIGNUPMODAL";
 export const CLOSEMODAL = "CLOSEMODAL";
 //======================== Room types =====================
 export const GETROOMS = "GETROOMS";
+export const GETROOM = "GETROOM";

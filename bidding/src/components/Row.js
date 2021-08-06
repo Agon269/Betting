@@ -34,6 +34,20 @@ const useRowStyles = makeStyles({
       backgroundColor: "#9400D3",
     },
   },
+  for: {
+    backgroundColor: "green",
+    color: "white",
+    padding: "2px",
+    textAlign: "center",
+    borderRadius: "5px",
+  },
+  against: {
+    backgroundColor: "red",
+    color: "white",
+    padding: "2px",
+    textAlign: "center",
+    borderRadius: "5px",
+  },
 });
 //just for rows
 const Row = ({ row }) => {
@@ -54,22 +68,21 @@ const Row = ({ row }) => {
           </IconButton>
         </TableCell>
         {/* name of row */}
-        <TableCell component="th" scope="row">
+        <TableCell align="left" scope="row">
           {row.title}
         </TableCell>
         {/*   properties */}
 
-        <TableCell align="right">{row.owner.username}</TableCell>
-        <TableCell align="right">{row.endTime}</TableCell>
-        <TableCell align="right">{row.bets[0].amountBet}</TableCell>
-        {/* <TableCell align="right">{row.room.category[0]}</TableCell> */}
-        <TableCell align="right">
+        <TableCell>{row.owner.username}</TableCell>
+        <TableCell>{row.endTime}</TableCell>
+        <TableCell>{row.category}</TableCell>
+        <TableCell>
           <Button
             className={classes.btn}
-            onClick={() => routeTo(`/bet/${row.bets[0].id}`)}
+            onClick={() => routeTo(`/room/${row.id}`)}
             variant="contained"
           >
-            view bet
+            view
           </Button>
         </TableCell>
       </TableRow>
@@ -79,12 +92,13 @@ const Row = ({ row }) => {
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
-                Sub bets
+                Bets
               </Typography>
               <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell>Creater</TableCell>
+                    <TableCell>Side</TableCell>
                     <TableCell>Bet Amount</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
@@ -93,6 +107,18 @@ const Row = ({ row }) => {
                   {row.bets.map((subBet) => (
                     <TableRow key={subBet.id}>
                       <TableCell>{subBet.bettor}</TableCell>
+                      {subBet.side ? (
+                        <TableCell>
+                          <Typography className={classes.for}>For</Typography>
+                        </TableCell>
+                      ) : (
+                        <TableCell>
+                          <Typography className={classes.against}>
+                            Against
+                          </Typography>
+                        </TableCell>
+                      )}
+
                       <TableCell>{subBet.amountBet}</TableCell>
                       <TableCell>
                         <Button

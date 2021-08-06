@@ -3,12 +3,13 @@ import MyTable from "../components/Table";
 import { getRooms } from "../actions/room-actions";
 import { connect } from "react-redux";
 import _ from "lodash";
+import Loading from "../components/Loading";
 const Bets = ({ rooms, getRooms }) => {
   useEffect(() => {
     getRooms();
   }, [getRooms]);
   if (_.isEmpty(rooms)) {
-    return <div>Loading ....</div>;
+    return <Loading />;
   }
 
   return <MyTable rooms={rooms} />;

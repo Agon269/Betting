@@ -9,10 +9,11 @@ import {
   TableBody,
   TableRow,
 } from "@material-ui/core";
-import Row from "./Row";
+
+import BetRow from "./BetRow";
 import { makeStyles } from "@material-ui/core";
-import { heads, allBets } from "../util/bets";
-const UserTable = () => {
+import { heads } from "../util/bets";
+const BetTable = ({ bets }) => {
   const useStyles = makeStyles((theme) => ({
     table: {
       minWidth: 650,
@@ -34,22 +35,25 @@ const UserTable = () => {
       <Table className={classes.table} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell />
-            <TableCell className={classes.heads}>Bet Title</TableCell>
-            {heads.map((head) => (
-              <TableCell key={head}>
-                <TableSortLabel>{head}</TableSortLabel>
-              </TableCell>
-            ))}
+            <TableCell className={classes.heads}>Creater</TableCell>
+
+            <TableCell>
+              <TableSortLabel>Side</TableSortLabel>
+            </TableCell>
+            <TableCell>
+              <TableSortLabel>Amount</TableSortLabel>
+            </TableCell>
+
+            <TableCell>Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {allBets.map((row, i) => (
-            <Row key={i} row={row} />
+          {bets.map((row, i) => (
+            <BetRow key={i} row={row} />
           ))}
         </TableBody>
       </Table>
     </TableContainer>
   );
 };
-export default UserTable;
+export default BetTable;

@@ -37,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
     padding: "10px",
     alignItems: "center",
   },
+  homeBtn: {
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
 }));
 const Header = ({ user, signOut }) => {
   const classes = useStyles();
@@ -50,12 +55,10 @@ const Header = ({ user, signOut }) => {
           justifyContent="space-between"
           className={classes.bar}
         >
-          <Typography
-            variant="h6"
-            className={classes.title}
-            onClick={() => routeTo("/")}
-          >
-            Betty
+          <Typography variant="h6" className={classes.title}>
+            <span onClick={() => routeTo("/")} className={classes.homeBtn}>
+              Betty
+            </span>
           </Typography>
 
           <Button className={classes.userIcon} onClick={() => routeTo("/bets")}>
