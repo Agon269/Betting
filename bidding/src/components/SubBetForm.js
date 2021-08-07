@@ -9,10 +9,11 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    width: "100%",
   },
   confirmBtn: {
     color: "white",
-    marginTop: "10px",
+    marginTop: "50px",
     backgroundColor: "#9400D3",
     "&:hover": {
       backgroundColor: "#9400D3",
@@ -20,30 +21,29 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AuthForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
+const SubBetForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
   const classes = useStyles();
 
   return (
     <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
       <Box display="flex" className={classes.formGroup}>
-        <Box>
-          <Field
-            name="username"
-            type="text"
-            component={Input}
-            label="User Name"
-            autoComplete="username"
-          />
-        </Box>
-        <Box>
-          <Field
-            name="password"
-            component={Input}
-            label="Password"
-            type="password"
-            autoComplete="password"
-          />
-        </Box>
+        <Field
+          name="amount"
+          type="number"
+          component={Input}
+          label="Amount"
+          placeholder="50"
+          autoComplete="amount"
+        />
+
+        <Field
+          name="side"
+          select={true}
+          options={["None", "For", "Against"]}
+          component={Input}
+          label="Side"
+        />
+
         <Button
           variant="contained"
           className={classes.confirmBtn}
@@ -60,20 +60,16 @@ const AuthForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
 const validate = (formValues) => {
   const errors = {};
 
-  if (!formValues.username) {
-    errors.username = "You must enter a user name";
+  if (!formValues.amount) {
+    errors.amount = "You must enter a amount";
   }
-  if (!formValues.password) {
-    errors.password = "You must enter password";
+  if (formValues.side === "None") {
+    errors.side = "You must enter side";
   }
-  if (formValues.password && formValues.password.length < 8) {
-    errors.password = "Password needs to be at least 8 characters";
-  }
-
   return errors;
 };
 
 export default reduxForm({
   form: "AuthForm",
   validate,
-})(AuthForm);
+})(SubBetForm);

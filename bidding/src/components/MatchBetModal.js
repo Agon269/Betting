@@ -6,17 +6,19 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Box } from "@material-ui/core";
-import AuthForm from "./AuthForm";
-import { connect } from "react-redux";
-import { signIn, signUp } from "../actions/auth-actions";
+
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(0),
   },
   popBtn: {
+    backgroundColor: "#9400D3",
+    marginTop: "30px",
+    marginBottom: "20px",
     color: "white",
-    backgroundColor: "transparent",
-    marginLeft: "5px",
+    "&:hover": {
+      backgroundColor: "#9400D3",
+    },
   },
   dialog: {
     border: "2px solid #9400D3",
@@ -37,17 +39,11 @@ const useStyles = makeStyles((theme) => ({
     borderColor: "#9400D3",
     marginTop: "10px",
   },
-  switch: {
-    color: "#9400D3",
-    "&:hover": {
-      cursor: "pointer",
-    },
-  },
 }));
 
-const AuthModal = ({ signUp, signIn, st }) => {
+const MatchModal = ({ action }) => {
   const classes = useStyles();
-  const [formType, setFormType] = React.useState("sign in");
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -55,22 +51,17 @@ const AuthModal = ({ signUp, signIn, st }) => {
   };
 
   const handleClose = () => {
-    setFormType("sign in");
     setOpen(false);
   };
 
-  const onSubmit = (formValues) => {
-    if (formType === "sign in") signIn(formValues);
-    else signUp(formValues);
-  };
   return (
-    <div>
+    <>
       <Button
         variant={"outlined"}
-        className={st ? classes.out : classes.popBtn}
+        className={classes.popBtn}
         onClick={handleClickOpen}
       >
-        Sign in
+        match bet
       </Button>
 
       <Dialog
@@ -81,41 +72,22 @@ const AuthModal = ({ signUp, signIn, st }) => {
         classes={{ paper: classes.dialog }}
       >
         <DialogTitle id="form-dialog-title" className={classes.formHead}>
-          <Typography className={classes.formTitle}>
-            {formType === "sign in" ? "Sign In" : "Sign up"}
-          </Typography>
+          <Typography className={classes.formTitle}>Match this bet</Typography>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Welcome to Betty Join us in our journey to make the best betting app
+            Warning, by agreeing to match this bet you are trusting the creater
+            to decide the winner. Please make sure the creater of this bet is
+            someone you know or a trusted user.
           </DialogContentText>
-          <AuthForm onSubmit={onSubmit} />
-          <Box textAlign="center" marginTop="30px">
-            {formType === "sign in" ? (
-              <Typography>
-                Don't have an{" "}
-                <span
-                  className={classes.switch}
-                  onClick={() => setFormType("sign up")}
-                >
-                  account ?
-                </span>
-              </Typography>
-            ) : (
-              <Typography>
-                Already have an{" "}
-                <span
-                  className={classes.switch}
-                  onClick={() => setFormType("sign in")}
-                >
-                  account ?
-                </span>
-              </Typography>
-            )}
-          </Box>
         </DialogContent>
+        <Box textAlign="center" marginTop="30px">
+          <Button className={classes.popBtn} onClick={() => action()}>
+            i Agree
+          </Button>
+        </Box>
       </Dialog>
-    </div>
+    </>
   );
 };
-export default connect(null, { signIn, signUp })(AuthModal);
+export default MatchModal;

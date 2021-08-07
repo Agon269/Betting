@@ -1,10 +1,10 @@
-export function mySort(bets, sortBy, type) {
-  bets = Object.values(bets);
-  let sortedBets = bets.sort(dynamicSort(sortBy));
+export function mySort(rooms, sortBy, type) {
+  rooms = Object.values(rooms);
+  //big problems here dont know how to fix it
+  let sortedBets = rooms.map((room) => room.bets.sort(dynamicSort(sortBy)));
 
   if (type === undefined) return sortedBets;
-  let descending = sortedBets.reverse();
-
+  let descending = rooms.reverse();
   return descending;
 }
 

@@ -2,25 +2,30 @@ import React, { useEffect } from "react";
 import Intro from "../components/Intro";
 import MyTable from "../components/Table";
 import { connect } from "react-redux";
-import { getBets } from "../actions";
+import { getRooms } from "../actions/room-actions";
 import Loading from "../components/Loading";
-const Home = ({ getBets, bets }) => {
+import { Container } from "@material-ui/core";
+const Home = ({ getRooms, rooms, user }) => {
   //fetching bets
   useEffect(() => {
-    getBets();
-  }, [getBets]);
-  if (!bets) {
+    getRooms();
+  }, [getRooms]);
+
+  if (!rooms) {
     return <Loading />;
   }
   return (
     <>
-      <Intro />
-      <MyTable bets={bets} />
+      <Intro user={user} />
+      <Container maxWidth="md">
+        <MyTable rooms={rooms} />
+      </Container>
     </>
   );
 };
 const mapStateToProps = (state) => {
-  let bets = Object.values(state.bets);
-  return { bets };
+  let newRooms = Object.values(state.room).slice(5);
+
+  return { rooms: newRooms, user: state.user };
 };
-export default connect(mapStateToProps, { getBets })(Home);
+export default connect(mapStateToProps, { getRooms })(Home);

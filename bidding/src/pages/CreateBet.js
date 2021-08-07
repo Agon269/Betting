@@ -7,7 +7,9 @@ import {
   Typography,
 } from "@material-ui/core";
 import BetForm from "../components/BetForm";
-const CreateBet = () => {
+import { connect } from "react-redux";
+import { createBet } from "../actions/bet-actions";
+const CreateBet = ({ createBet }) => {
   const useStyles = makeStyles((theme) => ({
     cont: {
       marginTop: "30px",
@@ -15,8 +17,8 @@ const CreateBet = () => {
   }));
   const classes = useStyles();
 
-  const onSubmit = (formVales) => {
-    console.log(formVales);
+  const onSubmit = (formValues) => {
+    createBet(formValues);
   };
   return (
     <Container component={Paper} maxWidth="md" className={classes.cont}>
@@ -33,4 +35,4 @@ const CreateBet = () => {
     </Container>
   );
 };
-export default CreateBet;
+export default connect(null, { createBet })(CreateBet);

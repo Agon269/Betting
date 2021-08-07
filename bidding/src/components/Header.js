@@ -37,6 +37,11 @@ const useStyles = makeStyles((theme) => ({
     padding: "10px",
     alignItems: "center",
   },
+  homeBtn: {
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
 }));
 const Header = ({ user, signOut }) => {
   const classes = useStyles();
@@ -50,21 +55,25 @@ const Header = ({ user, signOut }) => {
           justifyContent="space-between"
           className={classes.bar}
         >
-          <Typography
-            variant="h6"
-            className={classes.title}
-            onClick={() => routeTo("/")}
-          >
-            Betty
+          <Typography variant="h6" className={classes.title}>
+            <span onClick={() => routeTo("/")} className={classes.homeBtn}>
+              Betty
+            </span>
           </Typography>
 
-          <Button className={classes.userIcon} onClick={() => routeTo("/bet")}>
+          <Button className={classes.userIcon} onClick={() => routeTo("/bets")}>
             All bets
           </Button>
           {user.isSignedIn === true ? (
             <>
               <Button className={classes.btn} onClick={() => signOut()}>
                 Sign out
+              </Button>{" "}
+              <Button
+                className={classes.btn}
+                onClick={() => routeTo("/createbet")}
+              >
+                Create bet
               </Button>
               <IconButton
                 onClick={() => routeTo("/user")}
@@ -77,8 +86,7 @@ const Header = ({ user, signOut }) => {
             </>
           ) : (
             <>
-              <AuthModal type={"signin"} />
-              <AuthModal type={"signup"} />
+              <AuthModal type={"sign in"} />
             </>
           )}
         </Box>

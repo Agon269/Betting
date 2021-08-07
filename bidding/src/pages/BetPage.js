@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   makeStyles,
   Paper,
@@ -8,89 +8,201 @@ import {
   Button,
 } from "@material-ui/core";
 import { connect } from "react-redux";
-import { getBet } from "../actions/index";
-import MyCard from "../components/MyCard";
-function BetPage({ bet, getBet }) {
-  useEffect(() => {
-    getBet();
-  }, [getBet]);
+import Loading from "../components/Loading";
+import { getBet, matchBet, editBet } from "../actions/bet-actions";
+// import MyCard from "../components/MyCard";
+import MatchBetModal from "../components/MatchBetModal";
+const useStyles = makeStyles((theme) => ({
+  cont: {
+    marginTop: "30px",
 
-  const useStyles = makeStyles((theme) => ({
-    cont: {
-      marginTop: "30px",
+    paddingBottom: "15px",
+  },
+  userHeader: {
+    paddingTop: "40px",
+  },
+  tableHeader: {
+    margin: "40px",
+    paddingTop: "20px",
+  },
+  tableCont: {
+    marginTop: "40px",
+    marginBottom: "60px",
+    paddingBottom: "40px",
+  },
+  for: {
+    backgroundColor: "green",
+    color: "white",
+    padding: "10px",
+    textAlign: "center",
+    borderRadius: "5px",
+    display: "inline",
+    marginTop: "10px",
+  },
+  against: {
+    backgroundColor: "red",
+    color: "white",
+    padding: "10px",
+    textAlign: "center",
+    borderRadius: "5px",
+    display: "inline",
+    marginTop: "10px",
+  },
+  chip: {
+    padding: "10px",
+    textAlign: "center",
+    borderRadius: "5px",
+    display: "inline",
+    border: "1px solid #9400D3",
+    marginLeft: "5px",
+    marginTop: "10px",
+  },
+  tags: {
+    marginTop: "20px",
+    display: "flex",
+    flexWrap: "wrap",
+  },
+  selc: {
+    width: "100%",
+    border: "1px solid #9400D3 ",
+    padding: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    borderRadius: "4px",
+    marginBottom: "10px",
+    font: "inherit",
+    "&:focus": {
+      outline: "none!important",
+      border: "1px solid #9400D3!important",
     },
-    secondBtn: {
-      backgroundColor: "transparent",
-      marginLeft: "5px",
-      color: "#9400D3",
-      borderColor: "#9400D3",
-    },
-    userHeader: {
-      paddingTop: "40px",
-    },
-    tableHeader: {
-      margin: "40px",
-      paddingTop: "20px",
-    },
-    tableCont: {
-      marginTop: "40px",
-      marginBottom: "60px",
-      paddingBottom: "40px",
-    },
-    btn: {
-      backgroundColor: "#9400D3",
-      marginTop: "20px",
-      marginBottom: "20px",
-      color: "white",
-      "&:hover": {
-        backgroundColor: "#9400D3",
-      },
-    },
-  }));
+  },
+  btn: {
+    backgroundColor: "transparent",
+    marginLeft: "5px",
+    color: "#9400D3",
+    borderColor: "#9400D3",
+    marginTop: "10px",
+  },
+}));
+function BetPage({ bet, getBet, match, matchBet, user, editBet }) {
+  const { id } = match.params;
+  const [params, setParams] = useState({
+    amount: "",
+    side: "",
+  });
+  useEffect(() => {
+    getBet(id);
+  }, [getBet, id]);
   const classes = useStyles();
+
+  if (!bet) {
+    return <Loading />;
+  }
+
+  const handleMatch = () => {
+    matchBet(id);
+  };
+  const editHandler = (e) => {
+    e.preventDefault();
+    //validate here
+    editBet(id, params);
+  };
+  const onChangeHandler = ({ target }) => {
+    setParams((prevState) => ({
+      ...prevState,
+      [target.name]: target.value,
+    }));
+  };
+
   return (
     <>
       <Container component={Paper} className={classes.cont} maxWidth="md">
         <Typography className={classes.userHeader} variant="h4">
-          Bet title
+          {bet.room.title}
         </Typography>
         <Box maxWidth="600px">
-          <Typography variant="subtitle1">
-            Bet Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry's standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book.
+          <Typography variant="subtitle1">{bet.room.description}</Typography>
+        </Box>
+
+        <Box className={classes.tags}>
+          {bet.side ? (
+            <Typography className={classes.for}>Side: For </Typography>
+          ) : (
+            <Typography className={classes.against}>Side: Against</Typography>
+          )}
+          <Typography className={classes.chip}>
+            Amount : {bet.amountBet}$
           </Typography>
+          <Typography className={classes.chip}>User : name</Typography>
         </Box>
-        <Box className={classes.btnBox}>
-          <Button className={classes.btn}>Bet against</Button>
-          <Button className={classes.secondBtn} variant="outlined">
-            Create a sub bet
-          </Button>
+
+        <Box>
+          {user.isSignedIn &&
+          !bet.opposingBet &&
+          user.currentUser.id !== bet.bettor ? (
+            <MatchBetModal action={handleMatch} />
+          ) : null}
         </Box>
-      </Container>
-      <Container component={Paper} className={classes.cont} maxWidth="md">
-        <Typography className={classes.userHeader} variant="h4">
-          Bet Stats
-        </Typography>
-        <Box
-          display="flex"
-          flexWrap="wrap"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <MyCard head={"People betting"} number={4} type={"people"} />
-          <MyCard head={"Sub bets"} number={3} type={"bet"} />
-          <MyCard head={"Bet Amount"} number={21} type={"money"} />
-          <MyCard head={"End date"} number={"12/12/2021"} type={"date"} />
+        <Box>
+          {user.isSignedIn &&
+          user.currentUser.id === bet.bettor &&
+          !bet.opposingBet ? (
+            <>
+              <Box
+                display="flex"
+                flexDirection="column"
+                className={classes.tags}
+                maxWidth={"300px"}
+              >
+                <form onSubmit={(e) => editHandler(e)}>
+                  <Box>
+                    <label>Change side</label>
+                    <select
+                      name="side"
+                      className={classes.selc}
+                      onChange={(e) => {
+                        onChangeHandler(e);
+                      }}
+                    >
+                      <option value={""}>none</option>
+                      <option value={true}>For</option>
+                      <option value={false}>Against</option>
+                    </select>
+                  </Box>
+                  <Box>
+                    <label>Change Amount</label>
+                    <input
+                      className={classes.selc}
+                      name="amount"
+                      type="number"
+                      placeholder={bet.amountBet}
+                      value={params.amountBet}
+                      onChange={(e) => {
+                        onChangeHandler(e);
+                      }}
+                    />
+                  </Box>
+                  <Button className={classes.btn} type="submit">
+                    Submit
+                  </Button>
+                </form>
+              </Box>
+            </>
+          ) : (
+            ""
+          )}
         </Box>
       </Container>
     </>
   );
 }
-const mapStateToProps = (state) => {
-  //own props
-  //get user routeid/ match it with route id
-  return { bet: state.bets, user: state.user };
+const mapStateToProps = (state, ownProps) => {
+  let bets = Object.values(state.bets);
+  let newBets = bets.filter((bet) => bet.room === ownProps.match.params.id);
+
+  return {
+    bet: state.bets[ownProps.match.params.id],
+    bets: newBets,
+    user: state.user,
+  };
 };
-export default connect(mapStateToProps, { getBet })(BetPage);
+export default connect(mapStateToProps, { getBet, matchBet, editBet })(BetPage);
