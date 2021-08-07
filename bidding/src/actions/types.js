@@ -4,6 +4,8 @@ export const CREATEBET = "CREATEBET";
 export const EDITBET = "EDITBET";
 export const DELETEBET = "DELETEBET";
 export const GETUSERBETS = "GETUSERBETS";
+export const MATCHBET = "MATCHBET";
+export const CREATESUBBET = "CREATESUBBET";
 //=========================== SORT TYPES ==================
 export const ASCSORT = "ASCSORT";
 export const DSCSORT = "DSCSORT";
@@ -21,3 +23,6 @@ export const DISMISS = "DISMISS";
 export const SIGNINMODAL = "SIGNINMODAL";
 export const SIGNUPMODAL = "SIGNUPMODAL";
 export const CLOSEMODAL = "CLOSEMODAL";
+//======================== Room types =====================
+export const GETROOMS = "GETROOMS";
+export const GETROOM = "GETROOM";

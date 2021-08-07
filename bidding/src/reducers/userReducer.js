@@ -2,7 +2,7 @@ import { SIGNOUT, GETUSER } from "../actions/types";
 
 const INTITAL_STATE = {
   isSignedIn: false,
-  user: null,
+  currentUser: null,
 };
 const userReducer = (state = INTITAL_STATE, action) => {
   switch (action.type) {

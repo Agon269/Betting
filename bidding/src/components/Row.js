@@ -16,7 +16,7 @@ import {
 } from "@material-ui/core";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
-
+import routeTo from "../util/btnrouting";
 const useRowStyles = makeStyles({
   root: {
     "& > *": {
@@ -33,6 +33,20 @@ const useRowStyles = makeStyles({
     "&:hover": {
       backgroundColor: "#9400D3",
     },
+  },
+  for: {
+    backgroundColor: "green",
+    color: "white",
+    padding: "2px",
+    textAlign: "center",
+    borderRadius: "5px",
+  },
+  against: {
+    backgroundColor: "red",
+    color: "white",
+    padding: "2px",
+    textAlign: "center",
+    borderRadius: "5px",
   },
 });
 //just for rows
@@ -54,44 +68,65 @@ const Row = ({ row }) => {
           </IconButton>
         </TableCell>
         {/* name of row */}
-        <TableCell component="th" scope="row">
+        <TableCell align="left" scope="row">
           {row.title}
         </TableCell>
         {/*   properties */}
 
-        <TableCell align="right">{row.creater}</TableCell>
-        <TableCell align="right">{row.expireDate}</TableCell>
-        <TableCell align="right">{row.betAmount}</TableCell>
-        <TableCell align="right">{row.category}</TableCell>
-        <TableCell align="right">
-          <Button className={classes.btn} variant="contained">
-            Bet
+        <TableCell>{row.owner.username}</TableCell>
+        <TableCell>{row.endTime}</TableCell>
+        <TableCell>{row.category}</TableCell>
+        <TableCell>
+          <Button
+            className={classes.btn}
+            onClick={() => routeTo(`/room/${row.id}`)}
+            variant="contained"
+          >
+            view
           </Button>
         </TableCell>
       </TableRow>
-      {/* more details section for the row */}
+      {/* more details section for the row sub bets here */}
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box margin={1}>
               <Typography variant="h6" gutterBottom component="div">
-                Sub bets
+                Bets
               </Typography>
-              <Table size="small" aria-label="purchases">
+              <Table size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell>Creater</TableCell>
+                    <TableCell>Side</TableCell>
                     <TableCell>Bet Amount</TableCell>
                     <TableCell>Action</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.subBets.map((subBet) => (
-                    <TableRow key={subBet.creater}>
-                      <TableCell>{subBet.creater}</TableCell>
-                      <TableCell>{subBet.betAmount}</TableCell>
+                  {row.bets.map((subBet) => (
+                    <TableRow key={subBet.id}>
+                      <TableCell>{subBet.bettor}</TableCell>
+                      {subBet.side ? (
+                        <TableCell>
+                          <Typography className={classes.for}>For</Typography>
+                        </TableCell>
+                      ) : (
+                        <TableCell>
+                          <Typography className={classes.against}>
+                            Against
+                          </Typography>
+                        </TableCell>
+                      )}
+
+                      <TableCell>{subBet.amountBet}</TableCell>
                       <TableCell>
-                        <Button className={classes.btn}>Bet</Button>
+                        <Button
+                          className={classes.btn}
+                          onClick={() => routeTo(`/bet/${subBet.id}`)}
+                        >
+                          View bet
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}

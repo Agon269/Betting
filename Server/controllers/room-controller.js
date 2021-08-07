@@ -55,7 +55,7 @@ const roomById = async (req, res, next) => {
         if (!ObjectId.isValid(req.params.id)){
             return next(new HttpError("The room with the id doesn't exist.", 404));
         }
-        const room = await Room.findById(req.params.id).populate("bets")
+        const room = await Room.findById(req.params.id).populate("bets").populate("owner")
         if (!room) {
             return next(new HttpError("The room with the id doesn't exist.", 404));
         }

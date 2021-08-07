@@ -1,21 +1,16 @@
-import { GETBETS, ASCSORT, DSCSORT, SEARCH, GETBET } from "../actions/types";
-import { mySort } from "../services/sort";
-import { search } from "../services/search";
+import { GETBETS, GETBET, CREATEBET, CREATESUBBET } from "../actions/types";
 
-let sortedBets;
+import _ from "lodash";
+
 const betReducer = (state = {}, action) => {
   switch (action.type) {
     case GETBETS:
-      return { ...action.payload };
-    case ASCSORT:
-      sortedBets = mySort(state, action.payload);
-      return { ...sortedBets };
-    case DSCSORT:
-      sortedBets = mySort(state, action.payload, "descending");
-      return { ...sortedBets };
-    case SEARCH:
-      return search(state, action.payload);
+      return { ...state, ..._.mapKeys(action.payload, "id") };
+    case CREATEBET:
+      return { ...state, [action.payload.id]: action.payload };
     case GETBET:
+      return { ...state, [action.payload.id]: action.payload };
+    case CREATESUBBET:
       return { ...state, [action.payload.id]: action.payload };
 
     default:

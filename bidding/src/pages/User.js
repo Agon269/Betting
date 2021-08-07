@@ -7,10 +7,10 @@ import {
   Typography,
 } from "@material-ui/core";
 import MyCard from "../components/MyCard";
-import UserTable from "../components/UserTable";
+
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { getUserBets } from "../actions";
+import { getUserBets } from "../actions/bet-actions";
 import _ from "lodash";
 const User = ({ getUserBets, bets, user }) => {
   const useStyles = makeStyles((theme) => ({
@@ -32,10 +32,10 @@ const User = ({ getUserBets, bets, user }) => {
   useEffect(() => {
     // getUserBets(user);
   });
-
   if (_.isEmpty(user)) {
     return <Redirect to="/" />;
   }
+  console.log(user);
 
   if (!_.isEmpty(user))
     return (
@@ -50,8 +50,8 @@ const User = ({ getUserBets, bets, user }) => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <MyCard head={"Wallet"} number={1000} type={"money"} />
-            <MyCard head={"Bets made"} number={12} type={"bet"} />
+            <MyCard head={"Wallet"} number={user.wallet} type={"money"} />
+            <MyCard head={"Bets made"} number={user.bets.length} type={"bet"} />
             <MyCard head={"Lost"} number={4} type={"lost"} />
             <MyCard head={"Won"} number={5} type={"won"} />
           </Box>
@@ -60,7 +60,7 @@ const User = ({ getUserBets, bets, user }) => {
           <Typography variant="h4" className={classes.tableHeader}>
             All bets made
           </Typography>
-          <UserTable />
+          {/* <UserTable /> */}
         </Container>
       </>
     );

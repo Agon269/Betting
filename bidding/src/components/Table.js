@@ -16,7 +16,8 @@ import Row from "./Row";
 import SearchBar from "./SearchBar";
 import { heads } from "../util/bets";
 import { ascSort, dscSort, search } from "../actions/sort-actions";
-import { getBets } from "../actions";
+import { getBets } from "../actions/bet-actions";
+import Loading from "./Loading";
 
 const useStyles = makeStyles((theme) => ({
   heads: {
@@ -29,17 +30,18 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "28px",
   },
   tableContainer: {
-    marginBottom: "80px",
+    marginBottom: "40px",
+    marginTop: "30px",
   },
 }));
 
-const MyTable = ({ bets, getBets, ascSort, dscSort, search }) => {
+const MyTable = ({ rooms, getBets, ascSort, dscSort, search }) => {
   const classes = useStyles();
   const [currentSort, setCurrentSort] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
 
   const stableSort = (head) => {
-    if (bets.length === 0) {
+    if (rooms.length === 0) {
       return null;
     }
     if (head === currentSort) {
@@ -60,18 +62,14 @@ const MyTable = ({ bets, getBets, ascSort, dscSort, search }) => {
     setHasSearched(false);
   };
   //fetchingbets
-  if (bets.length === 0 && hasSearched === false) return <div>Loading...</div>;
+  if (rooms.length === 0 && hasSearched === false) return <Loading />;
   //render bets
+
   return (
-    <Container
-      maxWidth="md"
-      className={classes.tableContainer}
-      component={Paper}
-    >
+    <Container className={classes.tableContainer} component={Paper}>
       <Box display="flex" alignItems="center">
-        {" "}
         <SearchBar search={search} userSearched={userSearched} />
-        {hasSearched && bets.length === 1 ? (
+        {hasSearched && rooms.length === 1 ? (
           <Box>
             <Button variant="contained" onClick={() => unsecussfulSearch()}>
               Show all
@@ -85,19 +83,19 @@ const MyTable = ({ bets, getBets, ascSort, dscSort, search }) => {
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
-              <TableCell />
+              <TableCell></TableCell>
               <TableCell className={classes.heads}>Bet Title</TableCell>
               {heads.map((head) => (
-                <TableCell key={head} align="right">
+                <TableCell key={head}>
                   <TableSortLabel onClick={() => stableSort(head)}>
                     {head}
                   </TableSortLabel>
                 </TableCell>
               ))}
-              <TableCell align="right">Action</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
-          {bets.length === 0 && hasSearched ? (
+          {rooms.length === 0 && hasSearched ? (
             <Box className={classes.empty}>
               <Typography>No bets by this id</Typography>{" "}
               <Button
@@ -111,7 +109,7 @@ const MyTable = ({ bets, getBets, ascSort, dscSort, search }) => {
             </Box>
           ) : (
             <TableBody>
-              {bets.map((row, i) => (
+              {rooms.map((row, i) => (
                 <Row key={i} row={row} />
               ))}
             </TableBody>
