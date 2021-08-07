@@ -12,7 +12,7 @@ const allRooms = async (req, res, next) => {
 
     try {
 
-        const rooms = await Room.find({}).populate("bets")
+        const rooms = await Room.find({}).populate("bets").populate("owner")
 
         res.send({ rooms })
 
