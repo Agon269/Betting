@@ -12,7 +12,7 @@ const allRooms = async (req, res, next) => {
 
     try {
 
-        const rooms = await Room.find({}).populate("bets").populate("owner")
+        const rooms = await Room.find({}).populate({path:"bets",populate:{path:"bettor"}}).populate("owner")
 
         res.send({ rooms })
 
@@ -30,7 +30,7 @@ const openRooms = async (req, res, next) => {
 
     try {
 
-        const rooms = await Room.find({ winner: { $exists: false}}).populate("bets").populate("owner")
+        const rooms = await Room.find({ winner: { $exists: false}}).populate({path:"bets",populate:{path:"bettor"}}).populate("owner")
 
         res.send({ rooms })
 
@@ -55,7 +55,7 @@ const roomById = async (req, res, next) => {
         if (!ObjectId.isValid(req.params.id)){
             return next(new HttpError("The room with the id doesn't exist.", 404));
         }
-        const room = await Room.findById(req.params.id).populate("bets").populate("owner")
+        const room = await Room.findById(req.params.id).populate({path:"bets",populate:{path:"bettor"}}).populate("owner")
         if (!room) {
             return next(new HttpError("The room with the id doesn't exist.", 404));
         }
