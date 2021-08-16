@@ -9,10 +9,12 @@ import {
 import MyCard from "../components/MyCard";
 
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
+
 import { getUserBets } from "../actions/bet-actions";
+import { getUser } from "../actions/auth-actions";
+import Loading from "../components/Loading";
 import _ from "lodash";
-const User = ({ getUserBets, bets, user }) => {
+const User = ({ getUserBets, bets, user, getUser }) => {
   const useStyles = makeStyles((theme) => ({
     userHeader: {
       margin: "20px",
@@ -30,12 +32,12 @@ const User = ({ getUserBets, bets, user }) => {
   }));
   const classes = useStyles();
   useEffect(() => {
+    getUser();
     // getUserBets(user);
-  });
+  }, [getUser]);
   if (_.isEmpty(user)) {
-    return <Redirect to="/" />;
+    return <Loading />;
   }
-  console.log(user);
 
   if (!_.isEmpty(user))
     return (
@@ -71,4 +73,4 @@ const mapStateToProps = (state) => {
   let { currentUser } = state.user;
   return { bets, user: { ...currentUser } };
 };
-export default connect(mapStateToProps, { getUserBets })(User);
+export default connect(mapStateToProps, { getUserBets, getUser })(User);

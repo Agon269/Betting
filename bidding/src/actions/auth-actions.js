@@ -43,8 +43,8 @@ export const signUp = (formVals) => async (dispatch) => {
 export const getUser = (token) => async (dispatch) => {
   let res;
   try {
-    res = await betty.get(`/users/`);
-
+    res = await betty.get(`/users/userdata`);
+    console.log(res.data);
     dispatch({ type: GETUSER, payload: res.data.user });
   } catch (err) {
     //create an error message

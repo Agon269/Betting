@@ -24,7 +24,7 @@ const Home = ({ getRooms, rooms, user }) => {
   );
 };
 const mapStateToProps = (state) => {
-  let newRooms = Object.values(state.room).slice(5);
+  let newRooms = Object.values(state.room);
 
   return { rooms: newRooms, user: state.user };
 };

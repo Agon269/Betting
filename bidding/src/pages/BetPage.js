@@ -164,8 +164,8 @@ function BetPage({ bet, getBet, match, matchBet, user, editBet }) {
                       }}
                     >
                       <option value={""}>none</option>
-                      <option value={true}>For</option>
-                      <option value={false}>Against</option>
+                      <option value={"For"}>For</option>
+                      <option value={"Against"}>Against</option>
                     </select>
                   </Box>
                   <Box>

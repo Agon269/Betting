@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-
 const betSchema = new Schema(
   {
     // User placing the bet
@@ -47,7 +46,7 @@ const betSchema = new Schema(
       required: true,
     },
     updatedTime: {
-      type: Date
+      type: Date,
     },
   },
   {
@@ -60,6 +59,5 @@ const betSchema = new Schema(
     },
   }
 );
-
 
 module.exports = mongoose.model("Bet", betSchema);

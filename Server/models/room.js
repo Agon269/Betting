@@ -1,7 +1,6 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema
-
+const Schema = mongoose.Schema;
 
 const roomSchema = new Schema(
   {
@@ -15,8 +14,6 @@ const roomSchema = new Schema(
     },
     searchKey: {
       type: String,
-      unique:true,
-      required: true
     },
     // Creator of the room
     owner: {
@@ -35,7 +32,7 @@ const roomSchema = new Schema(
     },
     // Winner set by the owner after the end time
     winner: {
-      type: Boolean
+      type: Boolean,
     },
     // Bets placed in the room
     bets: [
@@ -53,9 +50,9 @@ const roomSchema = new Schema(
     ],
     // Category of the room to use for searching
     category: {
-        type: String,
-        required: true,
-      }
+      type: String,
+      required: true,
+    },
   },
   {
     toJSON: {
@@ -67,6 +64,5 @@ const roomSchema = new Schema(
     },
   }
 );
-
 
 module.exports = mongoose.model("Room", roomSchema);

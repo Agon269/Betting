@@ -75,12 +75,17 @@ export const matchBet = (id) => async (dispatch) => {
 };
 
 export const editBet = (id, changes) => async (dispatch) => {
+  if (changes.side === "For") changes.side = true;
+  else if (changes.side === "Against") changes.side = false;
   console.log(id, changes);
+
   try {
     let res = await betty.put(`/bets/bet/${id}`, { ...changes });
     dispatch({ type: EDITBET, payload: res.data });
-    history.push(`/bet/${res.data.id}`);
+
+    history.push(`/bet/${res.data.bet.id}`);
   } catch (err) {
+    console.log(err);
     if (err.response) dispatch(failed(err.response.data));
     else {
       dispatch(failed("Something went wrong"));
