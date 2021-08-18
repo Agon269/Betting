@@ -6,7 +6,6 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import SubBetForm from "./SubBetForm";
-import { connect } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SubBetModal = ({ creater }) => {
+const SubBetModal = ({ onSubmit }) => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -47,10 +46,6 @@ const SubBetModal = ({ creater }) => {
     setOpen(false);
   };
 
-  const onSubmit = (formValues) => {
-    //submit form
-    creater(formValues);
-  };
   return (
     <>
       <Button
@@ -78,4 +73,4 @@ const SubBetModal = ({ creater }) => {
     </>
   );
 };
-export default connect(null, {})(SubBetModal);
+export default SubBetModal;

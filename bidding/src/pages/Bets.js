@@ -1,21 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import MyTable from "../components/Table";
-import { getRooms } from "../actions/room-actions";
-import { connect } from "react-redux";
-import _ from "lodash";
+
+import { useQuery } from "react-query";
+import { getRooms } from "../api/api";
 import Loading from "../components/Loading";
-const Bets = ({ rooms, getRooms }) => {
-  useEffect(() => {
-    getRooms();
-  }, [getRooms]);
-  if (_.isEmpty(rooms)) {
+const Bets = () => {
+  const { data, error, isLoading, isError } = useQuery("rooms", getRooms);
+
+  if (isLoading) {
     return <Loading />;
   }
+  if (isError) {
+    return <div>Error {error.message}</div>;
+  }
 
-  return <MyTable rooms={rooms} />;
+  return <MyTable rooms={data} />;
 };
-const mapStateToProps = (state) => {
-  let newRooms = Object.values(state.room);
-  return { rooms: newRooms };
-};
-export default connect(mapStateToProps, { getRooms })(Bets);
+
+export default Bets;

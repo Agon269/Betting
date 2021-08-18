@@ -1,8 +1,7 @@
 import React from "react";
 import { Box, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-
-import { Field, reduxForm } from "redux-form";
+import { useForm } from "react-hook-form";
 import Input from "./Input";
 const useStyles = makeStyles((theme) => ({
   formGroup: {
@@ -20,27 +19,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AuthForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
+const AuthForm = ({ onSubmit }) => {
   const classes = useStyles();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm({ mode: "all" });
 
   return (
-    <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Box display="flex" className={classes.formGroup}>
         <Box>
-          <Field
+          <Input
             name="username"
             type="text"
-            component={Input}
             label="User Name"
+            errors={errors.username}
             autoComplete="username"
+            {...register("username", {
+              required: { value: true, message: "You must enter a user name" },
+            })}
+            ref={null}
           />
         </Box>
         <Box>
-          <Field
+          <Input
             name="password"
-            component={Input}
             label="Password"
             type="password"
+            errors={errors.password}
+            {...register("password", {
+              required: { value: true, message: "You must enter a password" },
+              minLength: {
+                value: 8,
+                message: "Password needs to be at least 8 characters",
+              },
+            })}
+            ref={null}
             autoComplete="password"
           />
         </Box>
@@ -48,7 +64,7 @@ const AuthForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
           variant="contained"
           className={classes.confirmBtn}
           type="submit"
-          disabled={pristine || submitting}
+          disabled={!isValid || isSubmitting}
         >
           Submit
         </Button>
@@ -57,23 +73,4 @@ const AuthForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
   );
 };
 
-const validate = (formValues) => {
-  const errors = {};
-
-  if (!formValues.username) {
-    errors.username = "You must enter a user name";
-  }
-  if (!formValues.password) {
-    errors.password = "You must enter password";
-  }
-  if (formValues.password && formValues.password.length < 8) {
-    errors.password = "Password needs to be at least 8 characters";
-  }
-
-  return errors;
-};
-
-export default reduxForm({
-  form: "AuthForm",
-  validate,
-})(AuthForm);
+export default AuthForm;

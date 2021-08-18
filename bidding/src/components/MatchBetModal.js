@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MatchModal = ({ action }) => {
+const MatchModal = ({ action, isMutating }) => {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -82,7 +82,11 @@ const MatchModal = ({ action }) => {
           </DialogContentText>
         </DialogContent>
         <Box textAlign="center" marginTop="30px">
-          <Button className={classes.popBtn} onClick={() => action()}>
+          <Button
+            disabled={isMutating}
+            className={classes.popBtn}
+            onClick={() => action()}
+          >
             i Agree
           </Button>
         </Box>

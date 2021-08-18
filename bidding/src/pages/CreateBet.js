@@ -7,19 +7,31 @@ import {
   Typography,
 } from "@material-ui/core";
 import BetForm from "../components/BetForm";
-import { connect } from "react-redux";
-import { createBet } from "../actions/bet-actions";
-const CreateBet = ({ createBet }) => {
-  const useStyles = makeStyles((theme) => ({
-    cont: {
-      marginTop: "30px",
-    },
-  }));
+import { createBet } from "../api/api";
+import { useMutation } from "react-query";
+import history from "../history";
+
+const useStyles = makeStyles((theme) => ({
+  cont: {
+    marginTop: "30px",
+  },
+}));
+
+const CreateBet = () => {
   const classes = useStyles();
 
-  const onSubmit = (formValues) => {
-    createBet(formValues);
+  //query here
+  // isLoading: isMutating
+  const { mutateAsync } = useMutation(createBet, {
+    onSuccess: (data) => {
+      history.push(`/bet/${data.id}`);
+    },
+  });
+  const onSubmit = async (formValues) => {
+    // createBet(formValues);
+    await mutateAsync({ ...formValues });
   };
+
   return (
     <Container component={Paper} maxWidth="md" className={classes.cont}>
       <Typography variant="h2">Create Bet</Typography>
@@ -35,4 +47,4 @@ const CreateBet = ({ createBet }) => {
     </Container>
   );
 };
-export default connect(null, { createBet })(CreateBet);
+export default CreateBet;

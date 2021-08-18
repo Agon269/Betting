@@ -1,23 +1,18 @@
 import React from "react";
 import { render } from "react-dom";
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware, compose } from "redux";
-import reduxThunk from "redux-thunk";
 import App from "./App";
-import reducers from "./reducers";
-import { getUser } from "./actions/auth-actions";
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(
-  reducers,
-  composeEnhancers(applyMiddleware(reduxThunk))
-);
+import { AuthProvider } from "./Auth";
+import { QueryClientProvider, QueryClient } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
-if (localStorage.jwtToken) {
-  store.dispatch(getUser(localStorage.jwtToken));
-}
+const queryClient = new QueryClient();
+
 render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <App />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </AuthProvider>
+  </QueryClientProvider>,
   document.getElementById("root")
 );

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../Auth";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Typography from "@material-ui/core/Typography";
@@ -6,10 +7,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import IconButton from "@material-ui/core/IconButton";
 import PermIdentityIcon from "@material-ui/icons/PermIdentity";
 import AuthModal from "./AuthModal";
-import { connect } from "react-redux";
 import { Button, Box } from "@material-ui/core";
 import routeTo from "../util/btnrouting";
-import { signOut } from "../actions/auth-actions";
+
 //later if we have a logo
 // import IconButton from "@material-ui/core/IconButton";
 // import MenuIcon from "@material-ui/icons/Menu";
@@ -43,7 +43,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const Header = ({ user, signOut }) => {
+const Header = () => {
+  const { user, onAuthChange, logOut } = useContext(AuthContext);
+
   const classes = useStyles();
   return (
     <>
@@ -66,7 +68,13 @@ const Header = ({ user, signOut }) => {
           </Button>
           {user.isSignedIn === true ? (
             <>
-              <Button className={classes.btn} onClick={() => signOut()}>
+              <Button
+                className={classes.btn}
+                onClick={() => {
+                  logOut();
+                  onAuthChange();
+                }}
+              >
                 Sign out
               </Button>{" "}
               <Button
@@ -95,7 +103,4 @@ const Header = ({ user, signOut }) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return { user: state.user };
-};
-export default connect(mapStateToProps, { signOut })(Header);
+export default Header;

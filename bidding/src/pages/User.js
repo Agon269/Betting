@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../Auth";
 import {
   makeStyles,
   Paper,
@@ -8,13 +9,11 @@ import {
 } from "@material-ui/core";
 import MyCard from "../components/MyCard";
 
-import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
-import { getUserBets } from "../actions/bet-actions";
-import { getUser } from "../actions/auth-actions";
-import Loading from "../components/Loading";
-import _ from "lodash";
-const User = ({ getUserBets, bets, user, getUser }) => {
+const User = () => {
+  const { user } = useContext(AuthContext);
+
   const useStyles = makeStyles((theme) => ({
     userHeader: {
       margin: "20px",
@@ -31,20 +30,17 @@ const User = ({ getUserBets, bets, user, getUser }) => {
     },
   }));
   const classes = useStyles();
-  useEffect(() => {
-    getUser();
-    // getUserBets(user);
-  }, [getUser]);
-  if (_.isEmpty(user)) {
-    return <Loading />;
-  }
 
-  if (!_.isEmpty(user))
+  if (!user.isSignedIn) {
+    return <Redirect to="/" />;
+  }
+  console.log(user);
+  if (user.isSignedIn)
     return (
       <>
         <Container component={Paper} className={classes.cont}>
           <Typography className={classes.userHeader} variant="h4">
-            {user.username}
+            {user.currentUser.username}
           </Typography>
           <Box
             display="flex"
@@ -52,8 +48,16 @@ const User = ({ getUserBets, bets, user, getUser }) => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <MyCard head={"Wallet"} number={user.wallet} type={"money"} />
-            <MyCard head={"Bets made"} number={user.bets.length} type={"bet"} />
+            <MyCard
+              head={"Wallet"}
+              number={user.currentUser.wallet}
+              type={"money"}
+            />
+            <MyCard
+              head={"Bets made"}
+              number={user.currentUser.bets.length}
+              type={"bet"}
+            />
             <MyCard head={"Lost"} number={4} type={"lost"} />
             <MyCard head={"Won"} number={5} type={"won"} />
           </Box>
@@ -68,9 +72,4 @@ const User = ({ getUserBets, bets, user, getUser }) => {
     );
 };
 
-const mapStateToProps = (state) => {
-  let bets = Object.values(state.bets);
-  let { currentUser } = state.user;
-  return { bets, user: { ...currentUser } };
-};
-export default connect(mapStateToProps, { getUserBets, getUser })(User);
+export default User;

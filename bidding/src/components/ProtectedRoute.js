@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Redirect } from "react-router-dom";
+import { AuthContext } from "../Auth";
+const ProtectedRoute = ({ component: RouteComponent, ...rest }) => {
+  const {
+    user: { currentUser },
+  } = useContext(AuthContext);
 
-export const ProtectedRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      localStorage.getItem("jwtToken") ? (
-        <Component {...props} />
-      ) : (
-        <Redirect to={{ pathname: "/", state: { from: props.location } }} />
-      )
-    }
-  />
-);
-//need to create an action for pop up of dialog to signin or signup
+  return (
+    <Route
+      {...rest}
+      render={(routerProps) =>
+        !!currentUser ? (
+          <RouteComponent {...routerProps} />
+        ) : (
+          <Redirect to={"/"} />
+        )
+      }
+    />
+  );
+};
+export default ProtectedRoute;

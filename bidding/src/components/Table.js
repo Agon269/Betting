@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Box, Container, TableSortLabel, Typography } from "@material-ui/core";
-import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Table,
@@ -15,8 +14,7 @@ import {
 import Row from "./Row";
 import SearchBar from "./SearchBar";
 import { heads } from "../util/bets";
-import { ascSort, dscSort, search } from "../actions/sort-actions";
-import { getBets } from "../actions/bet-actions";
+
 import Loading from "./Loading";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,24 +33,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MyTable = ({ rooms, getBets, ascSort, dscSort, search }) => {
+const MyTable = ({ rooms, getBets }) => {
   const classes = useStyles();
-  const [currentSort, setCurrentSort] = useState("");
-  const [hasSearched, setHasSearched] = useState(false);
 
-  const stableSort = (head) => {
-    if (rooms.length === 0) {
-      return null;
-    }
-    if (head === currentSort) {
-      //descending
-      dscSort(head);
-      setCurrentSort(null);
-    } else {
-      ascSort(head);
-      setCurrentSort(head);
-    }
-  };
+  const [hasSearched, setHasSearched] = useState(false);
 
   const userSearched = () => {
     setHasSearched(true);
@@ -68,7 +52,7 @@ const MyTable = ({ rooms, getBets, ascSort, dscSort, search }) => {
   return (
     <Container className={classes.tableContainer} component={Paper}>
       <Box display="flex" alignItems="center">
-        <SearchBar search={search} userSearched={userSearched} />
+        <SearchBar userSearched={userSearched} />
         {hasSearched && rooms.length === 1 ? (
           <Box>
             <Button variant="contained" onClick={() => unsecussfulSearch()}>
@@ -87,9 +71,7 @@ const MyTable = ({ rooms, getBets, ascSort, dscSort, search }) => {
               <TableCell className={classes.heads}>Bet Title</TableCell>
               {heads.map((head) => (
                 <TableCell key={head}>
-                  <TableSortLabel onClick={() => stableSort(head)}>
-                    {head}
-                  </TableSortLabel>
+                  <TableSortLabel>{head}</TableSortLabel>
                 </TableCell>
               ))}
               <TableCell>Action</TableCell>
@@ -120,4 +102,4 @@ const MyTable = ({ rooms, getBets, ascSort, dscSort, search }) => {
   );
 };
 
-export default connect(null, { getBets, ascSort, dscSort, search })(MyTable);
+export default MyTable;

@@ -69,7 +69,7 @@ const Input = ({
   input,
   label,
   type,
-  meta: { touched, invalid, error },
+  errors,
   des,
   select,
   options,
@@ -81,14 +81,14 @@ const Input = ({
       <Box className={classes.inputCont}>
         <label className={classes.labeled}>{label}</label>
         <textarea
-          className={error && touched ? classes.errorArea : classes.textArea}
+          className={classes.textArea}
           required
           rows="6"
           {...custom}
           {...input}
         />
         <Typography className={classes.errorText}>
-          {error && touched ? error : ""}
+          {errors ? errors.message : ""}
         </Typography>
       </Box>
     );
@@ -96,11 +96,7 @@ const Input = ({
     return (
       <Box className={classes.inputCont}>
         <label className={classes.labeled}>{label}</label>
-        <select
-          className={error && touched ? classes.error : classes.textArea}
-          {...input}
-          {...custom}
-        >
+        <select className={classes.textArea} {...input} {...custom}>
           {options.map((option) => (
             <option value={option} key={option}>
               {option}
@@ -116,14 +112,13 @@ const Input = ({
         <InputBase
           label={label}
           type={type}
-          error={(touched && invalid) || (touched && error)}
-          className={error && touched ? classes.error : classes.text}
+          className={classes.text}
           {...input}
           {...custom}
           required
         />
         <Typography className={classes.errorText}>
-          {error && touched ? error : ""}
+          {errors ? errors.message : ""}
         </Typography>
       </Box>
     );

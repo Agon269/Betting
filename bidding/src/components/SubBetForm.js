@@ -1,8 +1,7 @@
 import React from "react";
 import { Box, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-
-import { Field, reduxForm } from "redux-form";
+import { useForm } from "react-hook-form";
 import Input from "./Input";
 const useStyles = makeStyles((theme) => ({
   formGroup: {
@@ -21,34 +20,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SubBetForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
+const SubBetForm = ({ onSubmit }) => {
   const classes = useStyles();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid, isSubmitting },
+  } = useForm({ mode: "all" });
 
   return (
     <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
       <Box display="flex" className={classes.formGroup}>
-        <Field
+        <Input
           name="amount"
+          placeholder="100"
           type="number"
-          component={Input}
-          label="Amount"
-          placeholder="50"
-          autoComplete="amount"
+          label="Amount to bet"
+          errors={errors.amount}
+          {...register("amount", {
+            required: { value: true, message: "You must enter amount" },
+          })}
+          ref={null}
         />
 
-        <Field
+        <Input
           name="side"
           select={true}
-          options={["None", "For", "Against"]}
-          component={Input}
           label="Side"
+          options={["None", "For", "Against"]}
+          errors={errors.side}
+          {...register("side", {
+            required: { value: true, message: "You must select side" },
+          })}
+          ref={null}
         />
 
         <Button
           variant="contained"
           className={classes.confirmBtn}
           type="submit"
-          disabled={pristine || submitting}
+          disabled={!isValid || isSubmitting}
         >
           Submit
         </Button>
@@ -57,19 +68,4 @@ const SubBetForm = ({ handleSubmit, onSubmit, pristine, submitting }) => {
   );
 };
 
-const validate = (formValues) => {
-  const errors = {};
-
-  if (!formValues.amount) {
-    errors.amount = "You must enter a amount";
-  }
-  if (formValues.side === "None") {
-    errors.side = "You must enter side";
-  }
-  return errors;
-};
-
-export default reduxForm({
-  form: "AuthForm",
-  validate,
-})(SubBetForm);
+export default SubBetForm;

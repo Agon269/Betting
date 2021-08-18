@@ -1,31 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
+import { AuthContext } from "../Auth";
 import Intro from "../components/Intro";
 import MyTable from "../components/Table";
-import { connect } from "react-redux";
-import { getRooms } from "../actions/room-actions";
+
+// import { getRooms } from "../actions/room-actions";
 import Loading from "../components/Loading";
 import { Container } from "@material-ui/core";
-const Home = ({ getRooms, rooms, user }) => {
-  //fetching bets
-  useEffect(() => {
-    getRooms();
-  }, [getRooms]);
+import { useQuery } from "react-query";
+import { getRooms } from "../api/api";
 
-  if (!rooms) {
+const Home = () => {
+  const { user } = useContext(AuthContext);
+  const { data, error, isLoading, isError } = useQuery("rooms", getRooms);
+
+  if (isLoading) {
     return <Loading />;
+  }
+  if (isError) {
+    return <div>Error {error.message}</div>;
   }
   return (
     <>
       <Intro user={user} />
       <Container maxWidth="md">
-        <MyTable rooms={rooms} />
+        <MyTable rooms={data} />
       </Container>
     </>
   );
 };
-const mapStateToProps = (state) => {
-  let newRooms = Object.values(state.room);
 
-  return { rooms: newRooms, user: state.user };
-};
-export default connect(mapStateToProps, { getRooms })(Home);
+export default Home;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   makeStyles,
   Paper,
@@ -7,11 +7,12 @@ import {
   Typography,
   Button,
 } from "@material-ui/core";
-import { connect } from "react-redux";
 import Loading from "../components/Loading";
-import { getBet, matchBet, editBet } from "../actions/bet-actions";
-// import MyCard from "../components/MyCard";
 import MatchBetModal from "../components/MatchBetModal";
+import { useQuery, useMutation } from "react-query";
+import { AuthContext } from "../Auth";
+import { matchBet, editBetCall, getBet } from "../api/api";
+
 const useStyles = makeStyles((theme) => ({
   cont: {
     marginTop: "30px",
@@ -83,34 +84,64 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "10px",
   },
 }));
-function BetPage({ bet, getBet, match, matchBet, user, editBet }) {
+function BetPage({ match }) {
+  const classes = useStyles();
+  const { user } = useContext(AuthContext);
+
   const { id } = match.params;
   const [params, setParams] = useState({
     amount: "",
     side: "",
   });
-  useEffect(() => {
-    getBet(id);
-  }, [getBet, id]);
-  const classes = useStyles();
+  const {
+    data: bet,
+    error,
+    isLoading,
+    isError,
+  } = useQuery(["bets", { id }], getBet);
 
-  if (!bet) {
+  const { mutateAsync, isLoading: isMutating } = useMutation(matchBet, {
+    onSuccess: (data) => {
+      //send popup
+      //need to invalidate cache to refreseh
+      console.log(data);
+    },
+  });
+  const { mutateAsync: editBet, isLoading: editing } = useMutation(
+    editBetCall,
+    {
+      onSuccess: (data) => {
+        //send popup
+        //need to invalidate cache to refreseh
+        console.log(data);
+      },
+    }
+  );
+
+  if (isLoading) {
     return <Loading />;
   }
+  if (isError) {
+    return <div>Error {error.message}</div>;
+  }
 
-  const handleMatch = () => {
-    matchBet(id);
-  };
-  const editHandler = (e) => {
-    e.preventDefault();
-    //validate here
-    editBet(id, params);
+  //query here
+  const handleMatch = async () => {
+    await mutateAsync(id);
   };
   const onChangeHandler = ({ target }) => {
     setParams((prevState) => ({
       ...prevState,
       [target.name]: target.value,
     }));
+  };
+
+  //query here
+  const editHandler = (e) => {
+    e.preventDefault();
+    //validate here
+    console.log(params);
+    editBet({ id, params });
   };
 
   return (
@@ -139,7 +170,7 @@ function BetPage({ bet, getBet, match, matchBet, user, editBet }) {
           {user.isSignedIn &&
           !bet.opposingBet &&
           user.currentUser.id !== bet.bettor ? (
-            <MatchBetModal action={handleMatch} />
+            <MatchBetModal isMutating={isMutating} action={handleMatch} />
           ) : null}
         </Box>
         <Box>
@@ -164,8 +195,8 @@ function BetPage({ bet, getBet, match, matchBet, user, editBet }) {
                       }}
                     >
                       <option value={""}>none</option>
-                      <option value={"For"}>For</option>
-                      <option value={"Against"}>Against</option>
+                      <option value={true}>For</option>
+                      <option value={false}>Against</option>
                     </select>
                   </Box>
                   <Box>
@@ -181,7 +212,11 @@ function BetPage({ bet, getBet, match, matchBet, user, editBet }) {
                       }}
                     />
                   </Box>
-                  <Button className={classes.btn} type="submit">
+                  <Button
+                    className={classes.btn}
+                    disabled={editing}
+                    type="submit"
+                  >
                     Submit
                   </Button>
                 </form>
@@ -195,14 +230,5 @@ function BetPage({ bet, getBet, match, matchBet, user, editBet }) {
     </>
   );
 }
-const mapStateToProps = (state, ownProps) => {
-  let bets = Object.values(state.bets);
-  let newBets = bets.filter((bet) => bet.room === ownProps.match.params.id);
 
-  return {
-    bet: state.bets[ownProps.match.params.id],
-    bets: newBets,
-    user: state.user,
-  };
-};
-export default connect(mapStateToProps, { getBet, matchBet, editBet })(BetPage);
+export default BetPage;

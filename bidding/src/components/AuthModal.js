@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -6,9 +6,9 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Box } from "@material-ui/core";
+import { AuthContext } from "../Auth";
 import AuthForm from "./AuthForm";
-import { connect } from "react-redux";
-import { signIn, signUp } from "../actions/auth-actions";
+import betty from "../api/betty";
 const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(0),
@@ -45,7 +45,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AuthModal = ({ signUp, signIn, st }) => {
+const AuthModal = ({ st }) => {
+  const { onAuthChange } = useContext(AuthContext);
+
   const classes = useStyles();
   const [formType, setFormType] = React.useState("sign in");
   const [open, setOpen] = React.useState(false);
@@ -58,10 +60,28 @@ const AuthModal = ({ signUp, signIn, st }) => {
     setFormType("sign in");
     setOpen(false);
   };
-
-  const onSubmit = (formValues) => {
-    if (formType === "sign in") signIn(formValues);
-    else signUp(formValues);
+  //need to call the error message if error or call success message if success
+  const onSubmit = async (formValues) => {
+    let res;
+    if (formType === "sign in") {
+      try {
+        res = await betty.post("/users/login", { ...formValues });
+        const token = res.data.token;
+        localStorage.setItem("jwtToken", token);
+        onAuthChange(token);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      try {
+        res = await betty.post("/users/register", { ...formValues });
+        const token = res.data.token;
+        localStorage.setItem("jwtToken", token);
+        onAuthChange(token);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
   return (
     <div>
@@ -118,4 +138,4 @@ const AuthModal = ({ signUp, signIn, st }) => {
     </div>
   );
 };
-export default connect(null, { signIn, signUp })(AuthModal);
+export default AuthModal;

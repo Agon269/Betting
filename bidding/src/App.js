@@ -5,8 +5,7 @@ import BetPage from "./pages/BetPage";
 import Home from "./pages/Home";
 import Bets from "./pages/Bets";
 import { Router, Switch, Route, Redirect } from "react-router-dom";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-import Message from "./components/Message";
+import ProtectedRoute from "./components/ProtectedRoute";
 import history from "./history";
 import CreateBet from "./pages/CreateBet";
 import Room from "./pages/Room";
@@ -14,7 +13,7 @@ function App() {
   return (
     <Router history={history}>
       <Header />
-      <Message />
+
       <Switch>
         <Route exact path="/" component={Home} />
         <ProtectedRoute exact path="/user" component={User} />

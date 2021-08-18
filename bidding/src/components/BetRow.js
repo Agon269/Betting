@@ -46,7 +46,7 @@ const BetRow = ({ row }) => {
       <TableRow className={classes.root}>
         {/* name of row */}
         <TableCell align="left" scope="row">
-          {row.bettor}
+          {row.bettor.username}
         </TableCell>
         {/*   properties */}
 

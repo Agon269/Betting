@@ -106,7 +106,7 @@ const Row = ({ row }) => {
                 <TableBody>
                   {row.bets.map((subBet) => (
                     <TableRow key={subBet.id}>
-                      <TableCell>{subBet.bettor}</TableCell>
+                      <TableCell>{subBet.bettor.username}</TableCell>
                       {subBet.side ? (
                         <TableCell>
                           <Typography className={classes.for}>For</Typography>

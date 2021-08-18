@@ -1,14 +1,15 @@
 import axios from "axios";
 
-let localApi = "http://localhost:5000/api";
-
 const betty = axios.create({
-  baseURL: localApi,
+  baseURL: process.env.REACT_APP_API_SERVER,
   params: {},
   headers: {
     "Content-Type": "application/json",
   },
 });
+
+//interceptor for auth header
+
 betty.interceptors.request.use(
   function (config) {
     const token = localStorage.getItem("jwtToken");

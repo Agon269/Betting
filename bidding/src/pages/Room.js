@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext } from "react";
 import {
   makeStyles,
   Paper,
@@ -6,13 +6,16 @@ import {
   Box,
   Typography,
 } from "@material-ui/core";
-import { connect } from "react-redux";
-import { getRoom } from "../actions/room-actions";
-import { createSubBet } from "../actions/bet-actions";
+import { useQuery, useMutation } from "react-query";
+import { getRoom } from "../api/api";
+import { AuthContext } from "../Auth";
 import MyCard from "../components/MyCard";
 import Loading from "../components/Loading";
 import BetTable from "../components/BetTable";
 import SubBetModal from "../components/SubBetModal";
+import { createSubBet } from "../api/api";
+import history from "../history";
+
 const useStyles = makeStyles((theme) => ({
   cont: {
     marginTop: "30px",
@@ -39,21 +42,33 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "40px",
   },
 }));
-function Room({ room, getRoom, match, user, createSubBet }) {
+function Room({ match }) {
   const { id } = match.params;
+  const { user } = useContext(AuthContext);
 
-  useEffect(() => {
-    getRoom(id);
-  }, [getRoom, id]);
+  const {
+    data: room,
+    isError,
+    error,
+    isLoading,
+  } = useQuery(["room", { id }], getRoom);
+  const { mutateAsync } = useMutation(createSubBet, {
+    onSuccess: (data) => {
+      history.push(`/bet/${data.id}`);
+    },
+  });
   const classes = useStyles();
 
-  if (!room) {
+  if (isLoading) {
     return <Loading />;
   }
+  if (isError) {
+    return <div>Error {error.message}</div>;
+  }
 
-  const creater = (formValues) => {
+  const onSubmit = async (formValues) => {
     //create sub bet here
-    createSubBet(id, formValues);
+    await mutateAsync({ id, ...formValues });
   };
   return (
     <>
@@ -66,7 +81,7 @@ function Room({ room, getRoom, match, user, createSubBet }) {
         </Box>
         {user.isSignedIn ? (
           <Box className={classes.btnBox}>
-            <SubBetModal creater={creater} />
+            <SubBetModal onSubmit={onSubmit} />
           </Box>
         ) : null}
       </Container>
@@ -100,10 +115,5 @@ function Room({ room, getRoom, match, user, createSubBet }) {
     </>
   );
 }
-const mapStateToProps = (state, ownProps) => {
-  return {
-    room: state.room[ownProps.match.params.id],
-    user: state.user,
-  };
-};
-export default connect(mapStateToProps, { getRoom, createSubBet })(Room);
+
+export default Room;
