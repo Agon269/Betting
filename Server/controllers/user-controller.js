@@ -12,10 +12,7 @@ const login = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      const err = new HttpError(
-        "Invalid credentials passed, please check your credentials.",
-        422
-      );
+      const err = new HttpError("Invalid credentials passed, please check your credentials.", 422);
       return next(err);
     }
 
@@ -42,10 +39,7 @@ const login = async (req, res, next) => {
 
     res.status(200).json({ user: existingUser.toJSON(), token });
   } catch (error) {
-    const err = new HttpError(
-      "Logging in failed due to internal server issue, please try again later.",
-      500
-    );
+    const err = new HttpError("Logging in failed due to internal server issue, please try again later.", 500);
     return next(err);
   }
 };
@@ -57,10 +51,7 @@ const register = async (req, res, next) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      const err = new HttpError(
-        "Invalid credentials passed, please check your credentials.",
-        422
-      );
+      const err = new HttpError("Invalid credentials passed, please check your credentials.", 422);
       return next(err);
     }
 
@@ -70,19 +61,13 @@ const register = async (req, res, next) => {
 
     let existingUser = await User.findOne({ username });
     if (existingUser) {
-      const err = new HttpError(
-        "Couldn't register user as another user with same username already exists",
-        409
-      );
+      const err = new HttpError("Couldn't register user as another user with same username already exists", 409);
       return next(err);
     }
 
     // Hash password and save user
 
-    let hashedPass = await bcrypt.hash(
-      password,
-      Number(process.env.SALT_ROUNDS)
-    );
+    let hashedPass = await bcrypt.hash(password, Number(process.env.SALT_ROUNDS));
 
     // Add avatar with media manager here if needed
 
@@ -103,10 +88,7 @@ const register = async (req, res, next) => {
 
     res.status(201).json({ user: newUser.toJSON(), token });
   } catch (error) {
-    const err = new HttpError(
-      "Registering failed due to internal server issue, please try again later.",
-      500
-    );
+    const err = new HttpError("Registering failed due to internal server issue, please try again later.", 500);
     return next(err);
   }
 };
@@ -117,10 +99,7 @@ const getUser = async (req, res, next) => {
     const user = req.userData;
     res.status(200).json({ user: user });
   } catch (error) {
-    const err = new HttpError(
-      "Internal server issue, please try again later.",
-      500
-    );
+    const err = new HttpError("Internal server issue, please try again later.", 500);
     return next(err);
   }
 };
@@ -128,13 +107,10 @@ const getUser = async (req, res, next) => {
 // get current user from DB using jwt
 const getUserData = async (req, res, next) => {
   try {
-    const user = await User.findById(req.userData.id);
+    const user = await User.findById(req.userData.id).populate("bets").populate("rooms");
     res.status(200).json({ user: user });
   } catch (error) {
-    const err = new HttpError(
-      "Internal server issue, please try again later.",
-      500
-    );
+    const err = new HttpError("Internal server issue, please try again later.", 500);
     return next(err);
   }
 };

@@ -15,10 +15,7 @@ const allBets = async (req, res, next) => {
     const bets = await Bet.find({}).populate("room").populate("opposingBet");
     res.send({ bets: bets });
   } catch (error) {
-    const err = new HttpError(
-      "Getting bets failed due to internal server issue, please try again later.",
-      500
-    );
+    const err = new HttpError("Getting bets failed due to internal server issue, please try again later.", 500);
     return next(err);
   }
 };
@@ -30,18 +27,13 @@ const aBet = async (req, res, next) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return next(new HttpError("The bet with the id doesn't exist.", 404));
     }
-    const bet = await Bet.findById(req.params.id)
-      .populate("room")
-      .populate("opposingBet");
+    const bet = await Bet.findById(req.params.id).populate("room").populate("opposingBet");
     if (!bet) {
       return next(new HttpError("The bet with the id doesn't exist.", 404));
     }
     res.send({ bet: bet });
   } catch (error) {
-    const err = new HttpError(
-      "Getting a bet failed due to internal server issue, please try again later.",
-      500
-    );
+    const err = new HttpError("Getting a bet failed due to internal server issue, please try again later.", 500);
     return next(err);
   }
 };
@@ -64,12 +56,7 @@ const createBet = async (req, res, next) => {
     const user = await User.findById(req.userData.id);
     const { title, description, category, enddate, amount, side } = req.body;
     if (user.wallet - amount < 0) {
-      return next(
-        new HttpError(
-          "The bet amount placed is more than that available in your wallet.",
-          422
-        )
-      );
+      return next(new HttpError("The bet amount placed is more than that available in your wallet.", 422));
     }
 
     // Create room
@@ -124,10 +111,7 @@ const createBet = async (req, res, next) => {
       sess.commitTransaction();
     } catch (e) {
       console.log(e);
-      const err = new HttpError(
-        "Creating bet failed due to internal server issue, please try again.",
-        500
-      );
+      const err = new HttpError("Creating bet failed due to internal server issue, please try again.", 500);
       return next(err);
     }
 
@@ -135,10 +119,7 @@ const createBet = async (req, res, next) => {
 
     res.status(201).send({ room: newRoom.toJSON(), bet: newBet.toJSON() });
   } catch (error) {
-    const err = new HttpError(
-      "Creating bet failed due to internal server issue, please try again later.",
-      500
-    );
+    const err = new HttpError("Creating bet failed due to internal server issue, please try again later.", 500);
     return next(err);
   }
 };
@@ -167,48 +148,23 @@ const matchBet = async (req, res, next) => {
     }
     if (user.wallet - matchedBet.amountBet < 0) {
       // Check if users wallet have enough money
-      return next(
-        new HttpError(
-          "The bet amount placed is more than that available in your wallet.",
-          422
-        )
-      );
+      return next(new HttpError("The bet amount placed is more than that available in your wallet.", 422));
     }
     // Check if Bet already matched or no
     if (matchedBet.opposingBet) {
       const opp = await Bet.findById(matchedBet.opposingBet);
       if (opp.bettor.toString() === user.id.toString()) {
-        return next(
-          new HttpError(
-            "You already matched this bet, please try other bets.",
-            422
-          )
-        );
+        return next(new HttpError("You already matched this bet, please try other bets.", 422));
       }
-      return next(
-        new HttpError(
-          "Another bet has already matched this bet, please try other bets.",
-          422
-        )
-      );
+      return next(new HttpError("Another bet has already matched this bet, please try other bets.", 422));
     }
     // Get Bet room and check if room is still open for bets
     const room = matchedBet.room;
     if (!room) {
-      return next(
-        new HttpError(
-          "The room in which the bet is to be matched doesn't exist.",
-          422
-        )
-      );
+      return next(new HttpError("The room in which the bet is to be matched doesn't exist.", 422));
     }
-    if (
-      !(room.endTime.valueOf() > new Date().valueOf()) ||
-      room.winner != undefined
-    ) {
-      return next(
-        new HttpError("The time has ended for betting in this room.", 422)
-      );
+    if (!(room.endTime.valueOf() > new Date().valueOf()) || room.winner != undefined) {
+      return next(new HttpError("The time has ended for betting in this room.", 422));
     }
 
     //create a bet for the user to match bet
@@ -263,10 +219,7 @@ const matchBet = async (req, res, next) => {
     });
   } catch (error) {
     console.log(error);
-    const err = new HttpError(
-      "Matching bet failed due to internal server issue, please try again.",
-      500
-    );
+    const err = new HttpError("Matching bet failed due to internal server issue, please try again.", 500);
     return next(err);
   }
 };
@@ -289,12 +242,7 @@ const createSubBet = async (req, res, next) => {
     const user = await User.findById(req.userData.id);
     const { amount, side } = req.body;
     if (user.wallet - amount < 0) {
-      return next(
-        new HttpError(
-          "The bet amount placed is more than that available in your wallet.",
-          422
-        )
-      );
+      return next(new HttpError("The bet amount placed is more than that available in your wallet.", 422));
     }
 
     // Get Room
@@ -303,20 +251,12 @@ const createSubBet = async (req, res, next) => {
     }
     const room = await Room.findById(req.params.roomID);
     if (!room) {
-      return next(
-        new HttpError("The room to create bet in doesn't exist.", 404)
-      );
+      return next(new HttpError("The room to create bet in doesn't exist.", 404));
     }
 
-    if (
-      !(room.endTime.valueOf() > new Date().valueOf()) ||
-      room.winner != undefined
-    ) {
+    if (!(room.endTime.valueOf() > new Date().valueOf()) || room.winner != undefined) {
       return next(
-        new HttpError(
-          "The time has ended for betting in this room or a winner has already been decided.",
-          422
-        )
+        new HttpError("The time has ended for betting in this room or a winner has already been decided.", 422)
       );
     }
 
@@ -355,10 +295,7 @@ const createSubBet = async (req, res, next) => {
 
     res.status(201).send({ room: room.toJSON(), subBet: newBet.toJSON() });
   } catch (error) {
-    const err = new HttpError(
-      "Creating sub-bet failed due to internal server issue, please try again later.",
-      500
-    );
+    const err = new HttpError("Creating sub-bet failed due to internal server issue, please try again later.", 500);
     return next(err);
   }
 };
@@ -366,6 +303,18 @@ const createSubBet = async (req, res, next) => {
 // Function for editing a bet
 const editBet = async (req, res, next) => {
   try {
+    // Input validation
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      let msg = "Invalid data: ";
+      msg += errors
+        .array()
+        .map((er) => `${er.param}`)
+        .join(", ");
+
+      return next(new HttpError(msg, 422));
+    }
+
     // Validating Request For Edit
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return next(new HttpError("The bet with the id doesn't exist.", 404));
@@ -383,12 +332,7 @@ const editBet = async (req, res, next) => {
     // the substitute of the old amount as well
 
     if (user.wallet + bet.amountBet - amount < 0) {
-      return next(
-        new HttpError(
-          "The bet amount placed is more than that available in your wallet.",
-          422
-        )
-      );
+      return next(new HttpError("The bet amount placed is more than that available in your wallet.", 422));
     }
 
     // Validate user, room and bet
@@ -422,12 +366,7 @@ const editBet = async (req, res, next) => {
       res.send({ bet: bet.toJSON() });
     }
   } catch (error) {
-    return next(
-      new HttpError(
-        "Editing bet failed due to internal server error, please try again later.",
-        500
-      )
-    );
+    return next(new HttpError("Editing bet failed due to internal server error, please try again later.", 500));
   }
 };
 
@@ -476,12 +415,7 @@ const deleteBet = async (req, res, next) => {
       res.send({ bet: bet.toJSON() });
     }
   } catch (error) {
-    return next(
-      new HttpError(
-        "Deleting bet failed due to internal server error, please try again later.",
-        500
-      )
-    );
+    return next(new HttpError("Deleting bet failed due to internal server error, please try again later.", 500));
   }
 };
 
